@@ -16,6 +16,7 @@
 #'
 #' -    `sr_wynagr_r0_ivkw` - średnie wynagrodzenia w IV kw. roku ukończenia szkoły,
 #' -    `sr_wynagr_r1` - średnie wynagrodzenia w roku następującym po roku ukończenia szkoły,
+#' -    `sr_wynagr_r1_ikw` - średnie wynagrodzenia w I kw. roku następującym po roku ukończenia szkoły,
 #' -    `sr_wynagr_r2_ikw` - średnie wynagrodzenia w I kw. roku następującego w dwa lata po roku ukończenia szkoły,
 #' -    `sr_wynagr_r2` - średnie wynagrodzenia w roku następującym w dwa lata po roku ukończenia szkoły,
 #' -    `sr_wynagr_r3` - średnie wynagrodzenia w roku następującym w trzy lata po roku ukończenia szkoły,
@@ -69,6 +70,11 @@ dodaj_wskazniki_prace <- function(p4, p3) {
       select("id_abs", "rok_abs", "mies_od_ukoncz",
              sr_wynagr_r1 = "wynagrodzenie") %>%
       oblicz_wskaznik_z_p3("sr_wynagr_r1", fun = mean, pomijaj0 = TRUE),
+    p3 %>%
+      filter(.data$mies_od_ukoncz %in% (7L:9L)) %>%
+      select("id_abs", "rok_abs", "mies_od_ukoncz",
+             sr_wynagr_r1_ikw = "wynagrodzenie") %>%
+      oblicz_wskaznik_z_p3("sr_wynagr_r1_ikw", fun = mean, pomijaj0 = TRUE),
     p3 %>%
       filter(.data$mies_od_ukoncz %in% (19L:21L)) %>%
       select("id_abs", "rok_abs", "mies_od_ukoncz",
