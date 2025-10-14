@@ -23,11 +23,13 @@ argumentem \code{p3}) z dodanymi kolumnami:
 \itemize{
 \item \code{sr_wynagr_r0_ivkw} - średnie wynagrodzenia w IV kw. roku ukończenia szkoły,
 \item \code{sr_wynagr_r1} - średnie wynagrodzenia w roku następującym po roku ukończenia szkoły,
+\item \code{sr_wynagr_r1_ikw} - średnie wynagrodzenia w I kw. roku następującym po roku ukończenia szkoły,
 \item \code{sr_wynagr_r2_ikw} - średnie wynagrodzenia w I kw. roku następującego w dwa lata po roku ukończenia szkoły,
 \item \code{sr_wynagr_r2} - średnie wynagrodzenia w roku następującym w dwa lata po roku ukończenia szkoły,
 \item \code{sr_wynagr_r3} - średnie wynagrodzenia w roku następującym w trzy lata po roku ukończenia szkoły,
 \item \code{sr_wynagr_r4} - średnie wynagrodzenia w roku następującym w cztery lata po roku ukończenia szkoły,
-\item \code{sr_wynagr_uop_r0_wrzgru} - średnie wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły,
+\item \code{sr_wynagr_uop_nauka_r0_wrzgru} - średnie wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły w miesiącach kontynuowania nauki,
+\item \code{sr_wynagr_uop_bez_nauki_r0_wrzgru} - średnie wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły w miesiącach niekontynuowania nauki,
 \item \code{praca_nauka_r0_wrzgru} - długość zatrudnienia w okresie kontynuowania nauki między wrześniem a grudniem roku ukończenia szkoły,
 \item \code{praca_bez_nauki_r0_wrzgru} - długość zatrudnienia w okresie bez kontynuowania nauki między wrześniem a grudniem roku ukończenia szkoły,
 \item \code{bezrobocie_r0_wrzgru} - długość bycia zarejestrowanym bezrobotnym od września do grudnia roku ukończenia szkoły.
