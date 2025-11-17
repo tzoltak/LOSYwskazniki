@@ -29,7 +29,7 @@
 #' @seealso [oblicz_wskaznik_macierz()]- *koń roboczy* odpowiedzialny za
 #' obliczanie wskaźników w ramach `dodaj_wskazniki_kontynuacje()`
 #' @importFrom dplyr %>% .data bind_rows distinct filter full_join mutate select
-#'                   semi_join
+#'                   semi_join ungroup
 #' @importFrom tidyr pivot_wider
 #' @export
 dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
@@ -60,13 +60,26 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
                   collapse = "\n- "))
   }
 
-  p2$typ_szk_kont[p2$typ_szk_kont == "studia"] <- "Studia"
+  p2$typ_szk_kont[p2$typ_szk_kont == "studia"] <- "Studia" # dla zgodności ze starszymi wersjami tabel pośrednich
+  typySzkol <- c("Studia", "Szkoła policealna", "Liceum dla dorosłych",
+                 "Branżowa szkoła II stopnia", "KKZ", "KUZ")
   p2 <- p2 %>%
     filter(.data$mies_od_ukoncz %in% miesOdUkoncz) %>%
     left_join(p4 %>%
                 select("id_abs", "rok_abs", "typ_szk") %>%
                 distinct(),
-              by = c("id_abs", "rok_abs"), relationship = "many-to-many")
+              by = c("id_abs", "rok_abs"), relationship = "many-to-many") %>%
+    group_by(.data$id_abs, .data$rok_abs, .data$mies_od_ukoncz,
+             .data$id_szk_kont, .data$typ_szk_kont, .data$kod_zaw_kont) %>%
+    mutate(KKZwBSII = .data$typ_szk_kont == "Branżowa szkoła II stopnia" &
+             .data$forma_kont == "KKZ" &
+             all(c("uczeń", "KKZ") %in% .data$forma_kont)) %>%
+    ungroup() %>%
+    filter(!.data$KKZwBSII) %>%
+    mutate(typ_szk_kont = factor(if_else(.data$forma_kont %in% typySzkol,
+                                         as.character(.data$forma_kont),
+                                         as.character(.data$typ_szk_kont)),
+                                 typySzkol))
   if (tylkoLegalne) {
     p2 <- p2 %>%
       semi_join(LOSYwskazniki::legalneKontynuacje,
@@ -85,15 +98,9 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
     full_join(miesRokAbs,
               by = "rok_abs", relationship = "many-to-many")
 
-  typySzkol <- c("Studia", "Szkoła policealna", "Liceum dla dorosłych",
-                 "Branżowa szkoła II stopnia", "KKZ", "KUZ")
   szkoly <- p2 %>%
     filter(.data$typ_szk_kont %in% typySzkol |
              .data$forma_kont %in% typySzkol) %>%
-    mutate(typ_szk_kont = factor(if_else(.data$typ_szk_kont %in% typySzkol,
-                                         as.character(.data$typ_szk_kont),
-                                         as.character(.data$forma_kont)),
-                                 typySzkol)) %>%
     select("id_abs", "rok_abs", "mies_od_ukoncz", "typ_szk", "typ_szk_kont") %>%
     oblicz_wskaznik_macierz(zm = "typ_szk_kont", zestawWartosci = typySzkol,
                             wszystkieObs = wszystkieObs)
