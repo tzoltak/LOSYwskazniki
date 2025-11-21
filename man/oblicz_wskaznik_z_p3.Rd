@@ -39,8 +39,10 @@ wyłączone wartości zmiennej o nazwie \code{zm} równe 0? domyślnie \code{TRU
 agregacji wynagrodzeń i \code{FALSE} w pozostałych przypadkach}
 }
 \value{
-Ramka danych o kolumnach takich jak w \code{p3}, lub - jeśli podano
-argument \code{wszystkieObs} - kolumnach występujących zarówno w \code{p3} jak
+Ramka danych o kolumnach takich jak ramce przekazanej argumentem
+\code{p3}, ale z wyjątkiem kolumn opisujących okres (miesiac; tj. bez kolumn
+\code{okres}, \code{rok}, \code{miesiac}, \code{mies_od_ukoncz}) lub - jeśli podano argument
+\code{wszystkieObs} - kolumnach występujących zarówno w \code{p3} jak
 i we \code{wszystkieObs} oraz kolumnie o nazwie podanej argumentem \code{zm}. Liczba
 wierszy odpowiada albo liczbie wierszy obiektu przekazanego argumentem
 \code{wszystkieObs} albo liczbie unikalnych kombinacji wartości zmiennych

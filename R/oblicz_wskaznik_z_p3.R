@@ -26,8 +26,10 @@
 #' @param pomijaj0 opcjonalnie wartość logiczna - czy z agregacji powinny zostać
 #' wyłączone wartości zmiennej o nazwie `zm` równe 0? domyślnie `TRUE` przy
 #' agregacji wynagrodzeń i `FALSE` w pozostałych przypadkach
-#' @returns Ramka danych o kolumnach takich jak w `p3`, lub - jeśli podano
-#' argument `wszystkieObs` - kolumnach występujących zarówno w `p3` jak
+#' @returns Ramka danych o kolumnach takich jak ramce przekazanej argumentem
+#' `p3`, ale z wyjątkiem kolumn opisujących okres (miesiac; tj. bez kolumn
+#' `okres`, `rok`, `miesiac`, `mies_od_ukoncz`) lub - jeśli podano argument
+#' `wszystkieObs` - kolumnach występujących zarówno w `p3` jak
 #' i we `wszystkieObs` oraz kolumnie o nazwie podanej argumentem `zm`. Liczba
 #' wierszy odpowiada albo liczbie wierszy obiektu przekazanego argumentem
 #' `wszystkieObs` albo liczbie unikalnych kombinacji wartości zmiennych
@@ -82,10 +84,18 @@ oblicz_wskaznik_z_p3 <- function(p3, zm, wszystkieObs = NULL, fun = mean,
                                      "` jest różnych typów w obiekcie przekazanym argumentem `x`",
                                      " i w obiekcie przekazanym argumentem `wszystkieObs`.")))
     }
+    if (nrow(wszystkieObs) > nrow(distinct(select(wszystkieObs,
+                                                  "id_abs", "rok_abs")))) {
+      stop("Zmienne w ramce danych przekazanej argumentem `wszystkieObs`, które występują również w ramce danych przekazanej argumentem `p3`, nie mogą przyjmować kilku różnych wartości w ramach tej samej kombinacji wartości kolumn (`id_abs`, `rok_abs`).")
+    }
   } else {
     wszystkieObs <- p3 %>%
       select(all_of(zmDoLaczenia)) %>%
       distinct()
+    if (nrow(wszystkieObs) > nrow(distinct(select(wszystkieObs,
+                                                  "id_abs", "rok_abs")))) {
+      stop("Zmienne w ramce danych przekazanej argumentem `p3`, które nie opisują okresu, ani nie są agregowaną zmienną, nie mogą przyjmować kilku różnych wartości w ramach tej samej kombinacji wartości kolumn (`id_abs`, `rok_abs`).")
+    }
   }
   p3 <- p3 %>%
     filter(!is.na(.data[[zm]]))

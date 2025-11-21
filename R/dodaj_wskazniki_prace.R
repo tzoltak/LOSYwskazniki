@@ -21,8 +21,8 @@
 #' -    `sr_wynagr_r2` - średnie wynagrodzenia w roku następującym w dwa lata po roku ukończenia szkoły,
 #' -    `sr_wynagr_r3` - średnie wynagrodzenia w roku następującym w trzy lata po roku ukończenia szkoły,
 #' -    `sr_wynagr_r4` - średnie wynagrodzenia w roku następującym w cztery lata po roku ukończenia szkoły,
-#' -    `sr_wynagr_uop_nauka_r0_wrzgru` - średnie wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły w miesiącach kontynuowania nauki,
-#' -    `sr_wynagr_uop_bez_nauki_r0_wrzgru` - średnie wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły w miesiącach niekontynuowania nauki,
+#' -    `sr_wynagr_uop_nauka_r0_wrzgru` - średnie relatywne (odniesione do średnich miesięcznych wynagrodzeń w powiecie w danym roku) wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły w miesiącach kontynuowania nauki,
+#' -    `sr_wynagr_uop_bez_nauki_r0_wrzgru` - średnie relatywne (odniesione do średnich miesięcznych wynagrodzeń w powiecie w danym roku) wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły w miesiącach niekontynuowania nauki,
 #' -    `praca_nauka_r0_wrzgru` - długość zatrudnienia w okresie kontynuowania nauki między wrześniem a grudniem roku ukończenia szkoły,
 #' -    `praca_bez_nauki_r0_wrzgru` - długość zatrudnienia w okresie bez kontynuowania nauki między wrześniem a grudniem roku ukończenia szkoły,
 #' -    `bezrobocie_r0_wrzgru` - długość bycia zarejestrowanym bezrobotnym od września do grudnia roku ukończenia szkoły.
@@ -36,13 +36,13 @@
 #' @seealso [oblicz_wskaznik_z_p3()] - *koń roboczy* odpowiedzialny za agregację
 #' wskaźników w ramach `dodaj_wskazniki_prace()`
 #' @importFrom dplyr %>% .data across case_match distinct filter full_join
-#'                  left_join mutate select
+#'                  left_join mutate select semi_join
 #' @export
 dodaj_wskazniki_prace <- function(p4, p3) {
   stopifnot(is.data.frame(p3),
             all(c("id_abs", "rok_abs", "mies_od_ukoncz", "wynagrodzenie",
-                  "wynagrodzenie_uop", "praca", "nauka2",
-                  "bezrobocie") %in% names(p3)),
+                  "wynagrodzenie_uop", "powiat_sr_wynagrodzenie",
+                  "praca", "nauka2", "bezrobocie") %in% names(p3)),
             !anyNA(p3$id_abs), !anyNA(p3$rok_abs), !anyNA(p3$mies_od_ukoncz),
             is.null(p4) | is.data.frame(p4))
   if (!is.null(p4)) {
@@ -59,6 +59,8 @@ dodaj_wskazniki_prace <- function(p4, p3) {
       distinct()
     wszystkieObs <- p4
   }
+  p3 <- p3 %>%
+    semi_join(wszystkieObs, by = c("id_abs", "rok_abs"))
 
   wynagrodzenia <- list(
     p3 %>%
@@ -95,25 +97,16 @@ dodaj_wskazniki_prace <- function(p4, p3) {
       filter(.data$mies_od_ukoncz %in% (43L:54L)) %>%
       select("id_abs", "rok_abs", "mies_od_ukoncz",
              sr_wynagr_r4 = "wynagrodzenie") %>%
-      oblicz_wskaznik_z_p3("sr_wynagr_r4", fun = mean, pomijaj0 = TRUE)
+      oblicz_wskaznik_z_p3("sr_wynagr_r4", fun = mean, pomijaj0 = TRUE),
+    oblicz_wynagrodzenia_wzgledne(p3, miesOdUkoncz = 3L:6L, nauka2 = 1L,
+                                  nazwaWsk = "sr_wynagr_uop_nauka_r0_wrzgru"),
+    oblicz_wynagrodzenia_wzgledne(p3, miesOdUkoncz = 3L:6L, nauka2 = 0L,
+                                  nazwaWsk = "sr_wynagr_uop_bez_nauki_r0_wrzgru")
   )
   wynagrodzenia <-
     Reduce(function(x, y) {return(left_join(x, y,
                                             by = c("id_abs", "rok_abs")))},
            wynagrodzenia, wszystkieObs)
-
-  wynagrodzeniaUOPN <- p3 %>%
-    filter(.data$mies_od_ukoncz %in% (3L:6L), .data$nauka2 != 0L) %>%
-    select("id_abs", "rok_abs", "mies_od_ukoncz",
-           sr_wynagr_uop_nauka_r0_wrzgru = "wynagrodzenie_uop") %>%
-    oblicz_wskaznik_z_p3("sr_wynagr_uop_nauka_r0_wrzgru",
-                         fun = mean, pomijaj0 = TRUE)
-  wynagrodzeniaUOPBN <- p3 %>%
-    filter(.data$mies_od_ukoncz %in% (3L:6L), .data$nauka2 == 0L) %>%
-    select("id_abs", "rok_abs", "mies_od_ukoncz",
-           sr_wynagr_uop_bez_nauki_r0_wrzgru = "wynagrodzenie_uop") %>%
-    oblicz_wskaznik_z_p3("sr_wynagr_uop_bez_nauki_r0_wrzgru",
-                         fun = mean, pomijaj0 = TRUE)
 
   zatrudnienie <- full_join(
     p3 %>%
@@ -154,10 +147,6 @@ dodaj_wskazniki_prace <- function(p4, p3) {
 
   p4 <- p4 %>%
     left_join(wynagrodzenia,
-              by = c("id_abs", "rok_abs")) %>%
-    left_join(wynagrodzeniaUOPN,
-              by = c("id_abs", "rok_abs")) %>%
-    left_join(wynagrodzeniaUOPBN,
               by = c("id_abs", "rok_abs")) %>%
     left_join(zatrudnienie,
               by = c("id_abs", "rok_abs")) %>%

@@ -97,6 +97,8 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
     distinct() %>%
     full_join(miesRokAbs,
               by = "rok_abs", relationship = "many-to-many")
+  p2 <- p2 %>%
+    semi_join(wszystkieObs, by = c("id_abs", "rok_abs"))
 
   szkoly <- p2 %>%
     filter(.data$typ_szk_kont %in% typySzkol |

@@ -1,3 +1,13 @@
+# LOSYwskazniki 0.2.0 (21.11.2025)
+
+## Naprawione błędy
+
+-   `dodaj_wskazniki_prace()` oblicza `sr_wynagr_uop_nauka_r0_wrzgru` i `sr_wynagr_uop_bez_nauki_r0_wrzgru` jako **względne** wynagrodzenia (w odniesieniu do śr. miesięcznych wynagrodzeń w powiecie zamieszkania w danym roku).
+
+## Nowe funkcje
+
+-   `oblicz_wynagrodzenia_wzgledne()` pozwala obliczyć wskaźniki względnych wynagrodzeń (w odniesieniu do śr. miesięcznych wynagrodzeń w powiecie zamieszkania w danym roku); jej wyodrębnienie wynika z chęci umożliwienia jej użycia w ramach pakietu *MLASdaneAdm*.
+
 # LOSYwskazniki 0.1.3 (17.11.2025)
 
 ## Naprawione błędy

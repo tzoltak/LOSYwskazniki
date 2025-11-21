@@ -1,7 +1,7 @@
 Package: LOSYwskazniki
 Type: Package
 Title: Wskazniki opisujace sytuacje poszczegolnych absolwentow w systemie monitoringu karier absolwentow szkol ponadpodstawowych
-Version: 0.1.3
+Version: 0.2.0
 Authors@R: c(
     person(
       "Tomasz", "Żółtak",
