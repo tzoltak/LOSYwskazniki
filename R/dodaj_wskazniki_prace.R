@@ -35,6 +35,13 @@
 #' bezcelowe.
 #' @seealso [oblicz_wskaznik_z_p3()] - *koń roboczy* odpowiedzialny za agregację
 #' wskaźników w ramach `dodaj_wskazniki_prace()`
+#' @examples
+#' \dontrun{
+#'   p4 <- dodaj_wskazniki_prace(p4, p3)
+#'   str(p4)
+#'   p3agr <- dodaj_wskazniki_prace(NULL, p3)
+#'   str(p3agr)
+#' }
 #' @importFrom dplyr %>% .data across case_match distinct filter full_join
 #'                  left_join mutate select semi_join
 #' @export
@@ -61,6 +68,21 @@ dodaj_wskazniki_prace <- function(p4, p3) {
   }
   p3 <- p3 %>%
     semi_join(wszystkieObs, by = c("id_abs", "rok_abs"))
+  zmienneDoUsuniecia <- intersect(c("sr_wynagr_r0_ivkw",
+                                    "sr_wynagr_r1_ikw", "sr_wynagr_r2_ikw",
+                                    "sr_wynagr_r1", "sr_wynagr_r2",
+                                    "sr_wynagr_r3", "sr_wynagr_r4",
+                                    "sr_wynagr_uop_nauka_r0_wrzgru",
+                                    "sr_wynagr_uop_bez_nauki_r0_wrzgru",
+                                    "praca_nauka_r0_wrzgru",
+                                    "praca_bez_nauki_r0_wrzgru",
+                                    "bezrobocie_r0_wrzgru"), names(p4))
+  if (length(zmienneDoUsuniecia) > 0L) {
+    warning("Zmienne: `", paste(zmienneDoUsuniecia, collapse = "`, `"),
+            ", które już istnieją w danych przekazanych argumentem `p4` zostaną usunięte i będą utworzone na nowo.",
+            immediate. = TRUE)
+    p4 <- select(p4, -all_of(zmienneDoUsuniecia))
+  }
 
   wynagrodzenia <- list(
     p3 %>%

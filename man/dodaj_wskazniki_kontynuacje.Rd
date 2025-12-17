@@ -24,10 +24,10 @@ szkoły ukończonej przez absolwenta, por. \link{legalneKontynuacje})?}
 \value{
 Ramka danych przekazana argumentem \code{p4} z dodanymi kolumnami:
 \itemize{
-\item \code{typ_szk_kont} - formy kontynuacji nauki,
-\item \code{branza_kont_bsii} - branża kontynuacji nauki w BS II przez absolwentów BS I,
-\item \code{dziedzina_kont} - dziedzina kontynuacji nauki na studiach,
-\item \code{dyscyplina_kont} - dyscyplina kontynuacji nauki na studiach.
+\item \verb{typ_szk_kont<mies_od_ukoncz>} - formy kontynuacji nauki,
+\item \verb{branza_kont_bsii<mies_od_ukoncz>} - branża kontynuacji nauki w BS II przez absolwentów BS I,
+\item \verb{dziedzina_kont<mies_od_ukoncz>} - dziedzina kontynuacji nauki na studiach,
+\item \verb{dyscyplina_kont<mies_od_ukoncz>} - dyscyplina kontynuacji nauki na studiach.
 }
 }
 \description{
@@ -42,6 +42,14 @@ absolwenta ze względu na typ ukończonej przez niego szkoły (choć jeśli
 argument \code{tylkoLegalne} został ustawiony na \code{FALSE}, to podjęcie nauki
 w danej formie itp. zostanie odnotowane wartością 1, nawet jeśli nominalnie
 taka sytuacja nie powinna się zdarzyć).
+}
+\examples{
+\dontrun{
+  p4 <- dodaj_wskazniki_kontynuacje(p4, p2, c(6L, 18L, 30L, 42L, 54L))
+  colSums(p4$typ_szk_kont6, na.rm = TRUE)
+  colSums(dodaj_wskazniki_kontynuacje(p4, p2, 6L, tylkoLegalne = FALSE)$typ_szk_kont6,
+          na.rm = TRUE)
+}
 }
 \seealso{
 \code{\link[=oblicz_wskaznik_macierz]{oblicz_wskaznik_macierz()}}- \emph{koń roboczy} odpowiedzialny za

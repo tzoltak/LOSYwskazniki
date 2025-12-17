@@ -48,6 +48,14 @@ użycia w ramach procesu przygotowywania tabel \emph{pośrednich} przez
 \code{\link[MLASdaneAdm:przygotuj_tabele_posrednie]{MLASdaneAdm::przygotuj_tabele_posrednie()}} i późniejsze jej użycie jest
 bezcelowe.
 }
+\examples{
+\dontrun{
+  p4 <- dodaj_wskazniki_prace(p4, p3)
+  str(p4)
+  p3agr <- dodaj_wskazniki_prace(NULL, p3)
+  str(p3agr)
+}
+}
 \seealso{
 \code{\link[=oblicz_wskaznik_z_p3]{oblicz_wskaznik_z_p3()}} - \emph{koń roboczy} odpowiedzialny za agregację
 wskaźników w ramach \code{dodaj_wskazniki_prace()}

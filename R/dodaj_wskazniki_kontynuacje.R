@@ -14,10 +14,10 @@
 #' szkoły ukończonej przez absolwenta, por. [legalneKontynuacje])?
 #' @returns Ramka danych przekazana argumentem `p4` z dodanymi kolumnami:
 #'
-#' -    `typ_szk_kont` - formy kontynuacji nauki,
-#' -    `branza_kont_bsii` - branża kontynuacji nauki w BS II przez absolwentów BS I,
-#' -    `dziedzina_kont` - dziedzina kontynuacji nauki na studiach,
-#' -    `dyscyplina_kont` - dyscyplina kontynuacji nauki na studiach.
+#' -    `typ_szk_kont<mies_od_ukoncz>` - formy kontynuacji nauki,
+#' -    `branza_kont_bsii<mies_od_ukoncz>` - branża kontynuacji nauki w BS II przez absolwentów BS I,
+#' -    `dziedzina_kont<mies_od_ukoncz>` - dziedzina kontynuacji nauki na studiach,
+#' -    `dyscyplina_kont<mies_od_ukoncz>` - dyscyplina kontynuacji nauki na studiach.
 #' @details
 #' Każda z tworzonych kolumn jest macierzą binarną, w której wartość 1 opisuje
 #' kontynuowanie nauki w danej formie/branży/dziedzinie/dyscyplinie,
@@ -28,6 +28,13 @@
 #' taka sytuacja nie powinna się zdarzyć).
 #' @seealso [oblicz_wskaznik_macierz()]- *koń roboczy* odpowiedzialny za
 #' obliczanie wskaźników w ramach `dodaj_wskazniki_kontynuacje()`
+#' @examples
+#' \dontrun{
+#'   p4 <- dodaj_wskazniki_kontynuacje(p4, p2, c(6L, 18L, 30L, 42L, 54L))
+#'   colSums(p4$typ_szk_kont6, na.rm = TRUE)
+#'   colSums(dodaj_wskazniki_kontynuacje(p4, p2, 6L, tylkoLegalne = FALSE)$typ_szk_kont6,
+#'           na.rm = TRUE)
+#' }
 #' @importFrom dplyr %>% .data bind_rows distinct filter full_join mutate select
 #'                   semi_join ungroup
 #' @importFrom tidyr pivot_wider
@@ -38,7 +45,7 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
             all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p2)),
             !anyNA(p2$id_abs), !anyNA(p2$rok_abs), !anyNA(p2$mies_od_ukoncz),
             is.numeric(miesOdUkoncz), length(miesOdUkoncz) > 0L,
-            !anyNA(miesOdUkoncz),
+            !anyNA(miesOdUkoncz), !any(duplicated(miesOdUkoncz)),
             all(as.integer(miesOdUkoncz) == miesOdUkoncz),
             is.data.frame(p4),
             all(c("id_abs", "rok_abs", "typ_szk") %in% names(p4)),
@@ -58,6 +65,18 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
                                                         ";"))},
                          brakujaceMiesiace, names(brakujaceMiesiace)),
                   collapse = "\n- "))
+  }
+  zmienneDoUsuniecia <- intersect(
+    paste0(rep(c("typ_szk_kont", "branza_kont_bsii",
+                 "dziedzina_kont", "dyscyplina_kont"),
+               each = length(miesOdUkoncz)),
+           rep(miesOdUkoncz, 4)),
+    names(p4))
+  if (length(zmienneDoUsuniecia) > 0L) {
+    warning("Zmienne: `", paste(zmienneDoUsuniecia, collapse = "`, `"),
+            ", które już istnieją w danych przekazanych argumentem `p4` zostaną usunięte i będą utworzone na nowo.",
+            immediate. = TRUE)
+    p4 <- select(p4, -all_of(zmienneDoUsuniecia))
   }
 
   p2$typ_szk_kont[p2$typ_szk_kont == "studia"] <- "Studia" # dla zgodności ze starszymi wersjami tabel pośrednich

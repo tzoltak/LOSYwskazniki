@@ -1,3 +1,14 @@
+# LOSYwskazniki 0.3.0 (17.12.2025)
+
+## Nowe funkcje
+
+-   `przygotuj_dane_przeplywy()` pozwala zagregować dane - typowo zawarte w tabeli *pośredniej* P3 - do postaci, w której mogą one zostac łatwo wykorzystane do przygotowania wykresu przepływów, w szczególności z wykorzystaniem pakietu *ggalluvial* (i korzystającego z tego pakietu szablonu wykresu `wykresPrzeplywyStatusy`, zawartego w pakiecie *LOSYkolory*).
+
+## Udoskonalenia
+
+-   Funkcje `dodaj_wskazniki_dyplomy()`, `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_praca()` sprawdzają, czy zmienne, które będą tworzyć nie istnieją już w danych przekazanych argumentem `p4`, a jeśli tak, to je usuwają (generując ostrzeżenie).
+-   W dokumentacji funkcji `dodaj_wskazniki_dyplomy()`, `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_praca()` dodano przykłady użycia, przy czym do uruchomienia wymagają one posiadania załadowanych w ramach aktywnej sesji R odpowiednich danych z tabelami *pośrednimi* (które **nie** są dołączon do pakietu).
+
 # LOSYwskazniki 0.2.0 (21.11.2025)
 
 ## Naprawione błędy

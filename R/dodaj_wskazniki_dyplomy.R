@@ -39,8 +39,16 @@
 #'
 #' W przypadku `matura_zdana` wartości obliczane są dla wszystkich rekordów
 #' **bez względu na typ ukończonej szkoły**.
-#' @importFrom dplyr %>% .data arrange case_match coalesce distinct filter
-#'                   if_else left_join mutate select
+#' @examples
+#' \dontrun{
+#'   p4 <- dodaj_wskazniki_dyplomy(p4, p1,
+#'                                 maksMiesOdUkoncz = -3L, rokMonitoringu = 2025)
+#'   table(p4$matura_zdana)
+#'   table(p4$dyplom_zaw)
+#'   p4 <- dodaj_wskazniki_dyplomy(p4, p1, maksMiesOdUkoncz = 21L)
+#' }
+#' @importFrom dplyr %>% .data all_of arrange case_match coalesce distinct
+#'                   filter if_else left_join mutate select
 #' @export
 dodaj_wskazniki_dyplomy <- function(p4, p1, maksMiesOdUkoncz,
                                     rokMonitoringu = NULL) {
@@ -76,6 +84,13 @@ dodaj_wskazniki_dyplomy <- function(p4, p1, maksMiesOdUkoncz,
     p1 <- p1 %>%
       filter(.data$mies_od_ukoncz <= maksMiesOdUkoncz |
                .data$rodzaj_dyplomu == "tytuł czeladnika")
+  }
+  zmienneDoUsuniecia <- intersect(c("matura_zdana", "dyplom_zaw"), names(p4))
+  if (length(zmienneDoUsuniecia) > 0L) {
+    warning("Zmienne: `", paste(zmienneDoUsuniecia, collapse = "`, `"),
+            ", które już istnieją w danych przekazanych argumentem `p4` zostaną usunięte i będą utworzone na nowo.",
+            immediate. = TRUE)
+    p4 <- select(p4, -all_of(zmienneDoUsuniecia))
   }
 
   matura <- p1 %>%

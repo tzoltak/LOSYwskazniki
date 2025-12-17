@@ -57,3 +57,12 @@ uzyskanie certyfikatu kwalifikacji.
 W przypadku \code{matura_zdana} wartości obliczane są dla wszystkich rekordów
 \strong{bez względu na typ ukończonej szkoły}.
 }
+\examples{
+\dontrun{
+  p4 <- dodaj_wskazniki_dyplomy(p4, p1,
+                                maksMiesOdUkoncz = -3L, rokMonitoringu = 2025)
+  table(p4$matura_zdana)
+  table(p4$dyplom_zaw)
+  p4 <- dodaj_wskazniki_dyplomy(p4, p1, maksMiesOdUkoncz = 21L)
+}
+}

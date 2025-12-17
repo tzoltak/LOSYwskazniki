@@ -35,3 +35,7 @@ Pakiet zawiera też dwie funkcje trochę *niższego poziomu*, wykorzystywane int
 
 -   `oblicz_wskaznik_macierz()` - pozwala obliczyć wartość wskaźnika opisującego wiele niewykluczających się wzajemnie stanów (np. kontynuowanie nauki w różnych formach w danym miesiącu od ukończenia szkoły); tworzony wskaźnik ma postać kolumny-macierzy;
 -   `oblicz_wskaznik_z_p3()` - pozwala dokonać agregacji wartości zmiennej po czasie w ramach poszczególnych absolwentów.
+
+Ponadto zawiera też funkcję pozwalającą zagregować dane - typowo zawarte w tabeli *pośredniej* P3 - do postaci, w której mogą one zostac łatwo wykorzystane do przygotowania wykresu przepływów, w szczególności z wykorzystaniem pakietu *ggalluvial* (i korzystającego z tego pakietu szablonu wykresu `wykresPrzeplywyStatusy`, zawartego w pakiecie *LOSYkolory*):
+
+-   `przygotuj_dane_przeplywy()`.
