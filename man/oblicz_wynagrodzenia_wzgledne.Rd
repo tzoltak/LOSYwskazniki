@@ -20,7 +20,7 @@ podzbiorem)}
 wskaźnika}
 
 \item{nazwaWsk}{opcjonalnie ciąg znaków z nazwą kolumny, w której mają się
-znaleźć obliczone wartości wskaźnika względynych wynagrodzeń (domyślnie
+znaleźć obliczone wartości wskaźnika względnych wynagrodzeń (domyślnie
 "sr_wynagr_uop")}
 
 \item{nauka2}{opcjonalnie pojedyncza wartość liczbowa opisująca, czy dla
@@ -49,7 +49,7 @@ Ocena, czy absolwent kontynuował naukę dokonywana jest na podstawie zmiennej
 \code{nauka2}, co oznacza, że uczestnictwo w KKZ lub KUZ \strong{nie} jest traktowane
 jako kontynuacja nauki (w przypadku KKZ - o ile nie wiąże się z nauką w BS II).
 
-Funkcja została wyodrębiona w dużej mierze po to, aby mogła być użyta
+Funkcja została wyodrębniona w dużej mierze po to, aby mogła być użyta
 również w ramach pakietu \emph{MLASdaneAdm}, wewnątrz funkcji
 \code{\link[MLASdaneAdm:uzupelnij_wzgledne_wynagrodzenia]{MLASdaneAdm::uzupelnij_wzgledne_wynagrodzenia()}}.
 }
