@@ -9,7 +9,7 @@
 #' `miesOdUkoncz`, które mają być uwzględnione przy obliczaniu wartości
 #' wskaźnika
 #' @param nazwaWsk opcjonalnie ciąg znaków z nazwą kolumny, w której mają się
-#' znaleźć obliczone wartości wskaźnika względynych wynagrodzeń (domyślnie
+#' znaleźć obliczone wartości wskaźnika względnych wynagrodzeń (domyślnie
 #' "sr_wynagr_uop")
 #' @param nauka2 opcjonalnie pojedyncza wartość liczbowa opisująca, czy dla
 #' danego absolwenta mają być uwzględnione tylko miesiące, w których kontynuował
@@ -29,7 +29,7 @@
 #' `nauka2`, co oznacza, że uczestnictwo w KKZ lub KUZ **nie** jest traktowane
 #' jako kontynuacja nauki (w przypadku KKZ - o ile nie wiąże się z nauką w BS II).
 #'
-#' Funkcja została wyodrębiona w dużej mierze po to, aby mogła być użyta
+#' Funkcja została wyodrębniona w dużej mierze po to, aby mogła być użyta
 #' również w ramach pakietu *MLASdaneAdm*, wewnątrz funkcji
 #' [MLASdaneAdm::uzupelnij_wzgledne_wynagrodzenia()].
 #' @importFrom stats setNames

@@ -1,7 +1,7 @@
 Package: LOSYwskazniki
 Type: Package
 Title: Wskazniki opisujace sytuacje poszczegolnych absolwentow w systemie monitoringu karier absolwentow szkol ponadpodstawowych
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: c(
     person(
       "Tomasz", "Żółtak",
@@ -11,7 +11,7 @@ Authors@R: c(
   )
 Description: Pakiet zawiera funkcje pozwalające obliczać wskaźniki charakteryzujące przebieg karier poszczególnych absolwentów, wykorzystywane w systemie monitoringu karier absolwentów polskich szkół ponadpodstawowych.
 Depends:
-  R (>= 3.5.0)
+  R (>= 4.1.0)
 Imports:
   dplyr (>= 1.1.4),
   tidyr (>= 1.3.0)

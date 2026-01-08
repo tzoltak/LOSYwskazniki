@@ -41,6 +41,9 @@ przygotuj_dane_przeplywy <- function(p3, zm, punktyCzasu,
             !("idKombinacji" %in% names(p3)),
             is.vector(punktyCzasu), length(punktyCzasu) > 0L,
             !any(duplicated(punktyCzasu)))
+  if (length(punktyCzasu) == 1L) {
+    warning("Podano tylko jeden punkt czasu.", call. = FALSE, immediate. = TRUE)
+  }
   zm <-
     tryCatch(names(select(p3, {{zm}})),
              error = function(e) stop("W danych przekazanych argumentem `p3` nie ma zmiennej `",

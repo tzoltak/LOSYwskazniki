@@ -1,3 +1,22 @@
+# LOSYwskazniki 0.4.0 (16.01.2026)
+
+## Nowe funkcje
+
+-   Funkcje pozwalające obliczać zestawienia zagregowanych wskaźników w formie odpowiedniej do wykorzystania w zastosowaniach, w których takie zestawienia wskaźników mają być publicznie dostępne (np. w interaktywnych raportach przygotowanych w formie statycznych stron www):
+    -   `oblicz_wskazniki_pd_jst()` - najogólniejsza funkcja, pozwalająca przygotować zestawienie wartości zagregowanych wskaźników z danej edycji monitoringu dla wszystkich JST na określonym poziomie (Polska jako całość, województwa, powiaty),
+    -   `oblicz_wskazniki_pd_grupy()` - wykorzystywana przez `oblicz_wskazniki_pd_jst()` (w ramach konkretnej JST) do przygotowania wszystkich kombinacji wartości zmiennych niezależnych (filtrujących), a także dodanie wartości *ogółem*, i obliczenie wartości zagregowanych wskaźników dla każdej z nich,
+    -   `oblicz_wskazniki_pd()` - wykorzystywana przez `oblicz_wskazniki_pd_grupy()` do obliczenia wartości zagregowanych wskaźników na podstawie kolumn w przekazanych podzbiorach tabel *pośrednich* P4 i P3, adekwatnie do typu agregowanego wskaźnika,
+    -   `zanonimizuj_wskazniki_pd()` - pozwala zanonimizować (zastąpić brakami danych) wartości zagregowanych wskaźników, które zostały obliczone na podstawie mniej niż zadanej liczby absolwentów lub szkół;
+    -   `przygotuj_wskazniki_pd_toJSON()` - pozwalać przekształcić wskaźniki obliczone przez funkcję `oblicz_wskazniki_pd()`(a więc również przez `oblicz_wskazniki_pd_grupy()` lub `oblicz_wskazniki_pd_jst()` do formatu, który będzie przyjazny zapisaniu ich w formacie JSON przy pomocy funkcji `toJSON()` z pakietu *jsonlite*.
+-   Funkcje pomocnicze, wykorzystywane przez `oblicz_wskazniki_pd_grupy()`, ale potencjalnie użyteczne również w innych kontekstach:
+    -   `podmien_braki_danych()` - pozwala podmienić braki danych w wektorze/czynniku na podaną wartość; w odróżnieniu od wielu innych podobnych funkcji (w innych pakietach) **obsługuje również czynniki**;
+    -   `dodaj_wartosc_ogolem()` - pozwala dodać do zestawu wartości danego czynnika (wektora, przekształcając go przy tym na czynnik) dodatkową wartość, z założenia mającą opisywać, że chodzi o zestawienie ogółem ze względu na daną zmienną.
+
+## Drobne poprawki
+
+-   `przygotuj_dane_przeplywy()` ostrzega, jeśli argument `punkyCzasu` podaje tylko jedną wartość.
+-   Literówki w dokumentacji.
+
 # LOSYwskazniki 0.3.0 (17.12.2025)
 
 ## Nowe funkcje
@@ -7,7 +26,7 @@
 ## Udoskonalenia
 
 -   Funkcje `dodaj_wskazniki_dyplomy()`, `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_praca()` sprawdzają, czy zmienne, które będą tworzyć nie istnieją już w danych przekazanych argumentem `p4`, a jeśli tak, to je usuwają (generując ostrzeżenie).
--   W dokumentacji funkcji `dodaj_wskazniki_dyplomy()`, `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_praca()` dodano przykłady użycia, przy czym do uruchomienia wymagają one posiadania załadowanych w ramach aktywnej sesji R odpowiednich danych z tabelami *pośrednimi* (które **nie** są dołączon do pakietu).
+-   W dokumentacji funkcji `dodaj_wskazniki_dyplomy()`, `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_praca()` dodano przykłady użycia, przy czym do uruchomienia wymagają one posiadania załadowanych w ramach aktywnej sesji R odpowiednich danych z tabelami *pośrednimi* (które **nie** są dołączone do pakietu).
 
 # LOSYwskazniki 0.2.0 (21.11.2025)
 
