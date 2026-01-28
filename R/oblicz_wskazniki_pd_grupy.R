@@ -25,7 +25,7 @@
 #' kombinacja wartości występuje w danych używane będą zarówno zmienne, których
 #' nazwy zawiera dany element listy, (np. domyślnie `kod_zaw` i `nazwa_zaw`) jak
 #'  zmienna, której nazwę podano nazwą tego elementu listy (np.domyślnie
-#'  `typ_szk`), przyc czym:
+#'  `typ_szk`), przy czym:
 #'
 #' -    zmienne podane wartościami elementu listy będą miały tworzoną wspólnie
 #'      *wartość ogółem* (tj. wśród tworzonych grup albo wszystkie te zmienne

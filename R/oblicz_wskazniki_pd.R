@@ -67,7 +67,7 @@
 #'
 #' -    Kolumny będące czynnikami lub wektorami tekstowymi (w sensie sprawdzania
 #'      typu z wykorzystaniem funkcji [is.factor()] i [is.character()]) zostaną
-#'      zagregowane z wykorzystaniem funkcji [table()],
+#'      zagregowane z wykorzystaniem funkcji [table()].
 #'      -   Przy pomocy argumentu `wskTylkoNiezerowe` można wskazać, dla których
 #'          wskaźników mają zostać zwrócone tylko te wartości rozkładu, które
 #'          przyjmują niezerowe (i niebędące brakami danych) liczebności.
@@ -76,14 +76,13 @@
 #'      zagregowane przy pomocy funkcji/wyrażeń przekazanych argumentem
 #'      `statystyki` - efektem będzie wektor, nazwy elementów którego
 #'      odpowiadają nazwom elementów listy przekazanej argumentem `statystyki`
-#'      (domyślnie jednoelementowy wektor, z nazwą elementu "średnia"),
+#'      (domyślnie jednoelementowy wektor, z nazwą elementu "średnia").
 #' -    Kolumny będące macierzami liczb lub wartości logicznych zostaną
 #'      zagregowane poprzez zsumowanie wartości w kolumnach, przy czym
 #'      **kolumny, w których znajdowały się tylko braki danych, zostaną usunięte
 #'      z wyników** (nie dotyczy to sytuacji, gdy dane są puste, tzn. mają zero
 #'      wierszy, bo wtedy nie ma sensu rozważanie, czy w danej kolumnie znajduje
-#'      się brak danych, czy nie).cter()]) zostaną
-#'      zagregowane z wykorzystaniem funkcji [table()],
+#'      się brak danych, czy nie).
 #'      -   Przy pomocy argumentu `wskTylkoNiezerowe` można wskazać, dla których
 #'          wskaźników mają zostać zwrócone tylko te wartości rozkładu, które
 #'          przyjmują niezerowe (i niebędące brakami danych) liczebności.
@@ -197,7 +196,7 @@ oblicz_wskazniki_pd <- function(p4, p3,
                             c("id_abs", "rok_abs",
                               "mies_od_ukoncz", "rok", "miesiac",
                               "okres")),
-                  names_sep = "")
+                  names_glue = "{.value}{mies_od_ukoncz}")
     p4 <- left_join(p4, p3,
                     by = c("id_abs", "rok_abs"))
   }

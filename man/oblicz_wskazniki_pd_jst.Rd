@@ -58,7 +58,7 @@ element definiuje oddzielony zestaw zmiennych) - przy sprawdzaniu, czy dana
 kombinacja wartości występuje w danych używane będą zarówno zmienne, których
 nazwy zawiera dany element listy, (np. domyślnie \code{kod_zaw} i \code{nazwa_zaw}) jak
 zmienna, której nazwę podano nazwą tego elementu listy (np.domyślnie
-\code{typ_szk}), przyc czym:
+\code{typ_szk}), przy czym:
 \itemize{
 \item zmienne podane wartościami elementu listy będą miały tworzoną wspólnie
 \emph{wartość ogółem} (tj. wśród tworzonych grup albo wszystkie te zmienne

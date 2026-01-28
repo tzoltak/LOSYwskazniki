@@ -1,3 +1,14 @@
+# LOSYwskazniki 0.5.0 (28.01.2026)
+
+## Udoskonalenia
+
+-   `przygotuj_wskazniki_pd_toJSON()` otrzymała dwa nowe argumenty: `komunikatBrakDanych` i `komunikatCenzura`, które pozwalają zapisać bezpośrednio w danych treść komunikatów opisujących sytuację, gdy dla danego wskaźnika nie było żadnych absolwentów, na podstawie których można by go obliczyć lub gdy wartość wskaźnika została *ocenzurowana* (zanonimizowana).
+
+## Naprawione błędy
+
+-   `oblicz_wskazniki_pd()` (a w konsekwencji także `oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_jst()`) poprawnie tworzy nazwę wskaźnika w sytuacji, gdy na podstawie P3 obliczany jest tylko jeden wskaźnik.
+-   Literówki w dokumentacji.
+
 # LOSYwskazniki 0.4.0 (16.01.2026)
 
 ## Nowe funkcje

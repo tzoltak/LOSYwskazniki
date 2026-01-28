@@ -99,7 +99,7 @@ w wejściowych danych:
 \itemize{
 \item Kolumny będące czynnikami lub wektorami tekstowymi (w sensie sprawdzania
 typu z wykorzystaniem funkcji \code{\link[=is.factor]{is.factor()}} i \code{\link[=is.character]{is.character()}}) zostaną
-zagregowane z wykorzystaniem funkcji \code{\link[=table]{table()}},
+zagregowane z wykorzystaniem funkcji \code{\link[=table]{table()}}.
 \itemize{
 \item Przy pomocy argumentu \code{wskTylkoNiezerowe} można wskazać, dla których
 wskaźników mają zostać zwrócone tylko te wartości rozkładu, które
@@ -110,14 +110,13 @@ typu z wykorzystaniem funkcji \code{\link[=is.numeric]{is.numeric()}} i \code{\l
 zagregowane przy pomocy funkcji/wyrażeń przekazanych argumentem
 \code{statystyki} - efektem będzie wektor, nazwy elementów którego
 odpowiadają nazwom elementów listy przekazanej argumentem \code{statystyki}
-(domyślnie jednoelementowy wektor, z nazwą elementu "średnia"),
+(domyślnie jednoelementowy wektor, z nazwą elementu "średnia").
 \item Kolumny będące macierzami liczb lub wartości logicznych zostaną
 zagregowane poprzez zsumowanie wartości w kolumnach, przy czym
 \strong{kolumny, w których znajdowały się tylko braki danych, zostaną usunięte
 z wyników} (nie dotyczy to sytuacji, gdy dane są puste, tzn. mają zero
 wierszy, bo wtedy nie ma sensu rozważanie, czy w danej kolumnie znajduje
-się brak danych, czy nie).cter()]) zostaną
-zagregowane z wykorzystaniem funkcji \code{\link[=table]{table()}},
+się brak danych, czy nie).
 \itemize{
 \item Przy pomocy argumentu \code{wskTylkoNiezerowe} można wskazać, dla których
 wskaźników mają zostać zwrócone tylko te wartości rozkładu, które

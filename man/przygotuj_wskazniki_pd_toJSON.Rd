@@ -4,21 +4,63 @@
 \alias{przygotuj_wskazniki_pd_toJSON}
 \title{Agregowanie wskaznikow w nierozlacznych podgrupach do publicznej prezentacji}
 \usage{
-przygotuj_wskazniki_pd_toJSON(x)
+przygotuj_wskazniki_pd_toJSON(
+  x,
+  komunikatBrakDanych =
+    "W danych nie ma absolwentów pasujących do podanych kryteriów.",
+  komunikatCenzura =
+    "W danych było mniej niż {lAbs} absolwentów pasujących do podanych kryteriów lub ukończyli oni mniej niż {lSzk} różne szkoły, w związku z czym wyniki nie mogą zostać pokazane."
+)
 }
 \arguments{
 \item{x}{ramka danych zawierająca (między innymi) kolumny ze zagregowanymi
 wskaźnikami przeznaczonymi do publicznej prezentacji, typowo zwrócona przez
 funkcje \code{\link[=oblicz_wskazniki_pd_jst]{oblicz_wskazniki_pd_jst()}}, \code{\link[=oblicz_wskazniki_pd_grupy]{oblicz_wskazniki_pd_grupy()}} lub
 \code{\link[=oblicz_wskazniki_pd]{oblicz_wskazniki_pd()}}}
+
+\item{komunikatBrakDanych}{opcjonalnie ciąg znaków - komunikat, który ma
+zostać zapisany, jako element "brakDanych" (elementy "w" i "a" nie zostaną
+wtedy zapisane), dla tych wskaźników, dla których nie było żadnych
+absolwentów, na podstawie których można by obliczyć wskaźnik (tj. atrybut
+\code{lAbs} równy jest równy zero lub atrybut \code{lSzk} jest równy zero);
+jeśli taki atrybut nie ma być dopisywany, należy argumentem przekazać wartość
+\code{NA_character_}}
+
+\item{komunikatCenzura}{opcjonalnie ciąg znaków - komunikat, który ma
+zostać zapisany, jako element "cenzura" (elementy "w" i "a" nie zostaną wtedy
+zapisane), dla tych wskaźników, które zostały \emph{ocenzurowane}/zanonimizowane
+(tj. ich atrybut \code{lAbs} jest mniejszy od zera lub ich atrybut \code{lSzk} jest
+mniejszy od zera);
+podany ciag znaków może zawierać kody specjalne "\{lAbs\}" i "\{lSzk\}", za
+które podstawione zostaną odpowiednie wartości progów użytych podczas
+anonimizacji (odczytane z atrybutów \code{lAbs} i \code{lSzk});
+jeśli taki atrybut nie ma być dopisywany, należy argumentem przekazać wartość
+\code{NA_character_}}
 }
 \value{
 Ramka danych przekazana argumentem \code{x}, w której wskaźniki zostały
-przekształcone na zagnieżdżone listy.
+przekształcone na zagnieżdżone listy. Każdy element kolumny-listy
+zawierającej wskaźniki jest listą zawierającą dwa elementy:
+\itemize{
+\item \code{w}, zawierający ramkę danych z wartościami wskaźnika, utworzoną w ten
+sposób, że kolumna \code{label} zawiera nazwy elementów wejściowego wektora,
+a kolumna \code{value} ich wartości,
+\item \code{a}, zawierający atrybuty wskaźnika.
+}
+
+Jeśli jednak argumentami \code{komunikatBrakDanych} i \code{komunikatCenzura} nie
+podano wartości \code{NA_character_} i dla danego wskaźnika jest spełniony
+warunek braku danych lub zanonimizowania jego wartości, to dany element
+będzie listą jednoelementową, zawierającą jedynie element odpowiednio
+\code{brakDanych} albo \code{cenzura}, będących ciągiem znaków (nie będzie jednak
+zawierał ani elementu \code{w}, ani elementu \code{a}).
 }
 \description{
 Funkcja przekształca wskaźniki obliczone przez funkcję \code{\link[=oblicz_wskazniki_pd]{oblicz_wskazniki_pd()}}
 (a więc również przez \code{\link[=oblicz_wskazniki_pd_grupy]{oblicz_wskazniki_pd_grupy()}} lub
 \code{\link[=oblicz_wskazniki_pd_jst]{oblicz_wskazniki_pd_jst()}}) do formatu, który będzie przyjazny zapisaniu
 ich w formacie JSON przy pomocy funkcji \code{toJSON()} z pakietu \emph{jsonlite}.
+}
+\seealso{
+\code{\link[=zanonimizuj_wskazniki_pd]{zanonimizuj_wskazniki_pd()}}
 }
