@@ -1,3 +1,34 @@
+# LOSYwskazniki 0.6.0 (22.03.2026)
+
+## Nowe funkcje
+
+-   `dopisz_wskaznik_pd_liczba_abs` pozwala dodać do zestawienia zagregowanych wskaźników w formie odpowiedniej do wykorzystania w zastosowaniach, w których takie zestawienia wskaźników mają być publicznie dostępne (np. w interaktywnych raportach przygotowanych w formie statycznych stron www) wskaznik opisujący liczbę absolwentów (obliczany na podstawie atrybutów wskazanego, już wcześniej obliczonego wskaźnika).
+
+## Zmiany nazw argumentów funkcji
+
+-   Nazwę argumentu `zmTylkoWartosciWdanych` zmieniono na, w pełni zgodną z konwencją, `zmTylkoWartosciWDanych` w funkcjach `oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_grupy()`.
+    -   Ta zmiana ma potencjał do generowania błędów w już napisanym kodzie korzystającym z pakietu, ale biorąc pod uwagę, że poza mną raczej nikt go jeszcze nie używa, zdecydowałem się ją wprowadzić w sposób *bezkompromisowy*.
+-   Domyślna wartość argumentu `zmTylkoWartosciWDanych` w funkcjach `oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_grupy()` została zmieniona tak, aby obejmowała również zmienną grupującą `mlodoc` w ramach `typ_szk`.
+
+## Udoskonalenia
+
+-   W `oblicz_wskazniki_pd_grupy()` zrównoleglono część kodu odpowiedzialną za wywoływanie `oblicz_wskazniki_pd()`.
+    -   `oblicz_wskazniki_pd_grupy()` otrzymała nowy argument `liczbaWatkow`, pozwalający wskazać liczbę procesów wykorzystywanych do obliczeń.
+    -   `oblicz_wskazniki_pd_jst()` otrzymała nowy argument `liczbaWatkowGrupy`, którego wartość przekazywana jest do argumentu `liczbaWatkow` przy wywoływaniu `oblicz_wskazniki_pd_grupy()`.
+-   W `oblicz_wskazniki_pd_jst()` zrównoleglono część kodu odpowiedzialną za wywoływanie `oblicz_wskazniki_pd_grupy()`.
+    -   `oblicz_wskazniki_pd_jst()` otrzymała nowy argument `liczbaWatkow`, pozwalający wskazać liczbę procesów wykorzystywanych do obliczeń.
+    -   Zrównoleglanie na tym poziomie oczywiście może zostać zastosowane tylko przy obliczaniu wskaźników dla województw lub powiatów.
+    -   Testy empiryczne na danych do prototypu raportu ogólnopolskiego wskazują, że .
+-   W związku z implementacją wielowątkowości pakiet zależy teraz od pakietu *parallel*.
+-   Przeprowadzono (niezbyt rozbudowane) testy empiryczne mające na celu ustalenie optymalnych wartości argumentów opisujących zrównoleglannie - ich wyniki zostały dołączone do pakietu w postaci zbioru danych `czasy_wskazniki_pd` i omówione w dokumentacji funkcji `oblicz_wskazniki_pd_JST()`.
+
+## Naprawione błędy
+
+-   `oblicz_wskazniki_pd_grupy()`:
+    -   rozpatrując, które kombinacje wartości nie występują w danych (na podstawie argumentu `zmTylkoWartosciWDanych`) definiując pogrupowanie bierze pod uwagę również zmienną opisaną nazwą elementu listy,
+    -   sprawdzając, czy dana zmienna grupująca opisuje kategorię *ogółem* przyrównuje jej wartość do weartości podanej argumentem `etykietaOgolem`, zamiast do ciagu znaków "Ogółem",
+    -   radzi sobie w sytuacji, gdy wśród zmiennych grupujących nie ma żadnych, które występowałyby również w `zmTylkoWartosciWDanych`.
+
 # LOSYwskazniki 0.5.0 (28.01.2026)
 
 ## Udoskonalenia

@@ -105,7 +105,7 @@
 #'     zerami albo brakami danych (ale z pominięciem wierszy zawierających
 #'     same braki danych).
 #' @seealso [oblicz_wskazniki_pd_jst()], [oblicz_wskazniki_pd_grupy()],
-#' [zanonimizuj_wskazniki_pd()]
+#' [dopisz_wskaznik_pd_liczba_abs()], [zanonimizuj_wskazniki_pd()]
 #' @importFrom dplyr %>% .data across all_of any_of everything mutate n_distinct
 #'             reframe rename_with select where
 #' @importFrom tidyr pivot_longer

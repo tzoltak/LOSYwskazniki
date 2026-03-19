@@ -8,8 +8,9 @@ przygotuj_wskazniki_pd_toJSON(
   x,
   komunikatBrakDanych =
     "W danych nie ma absolwentów pasujących do podanych kryteriów.",
-  komunikatCenzura =
-    "W danych było mniej niż {lAbs} absolwentów pasujących do podanych kryteriów lub ukończyli oni mniej niż {lSzk} różne szkoły, w związku z czym wyniki nie mogą zostać pokazane."
+  komunikatCenzura = paste("W danych było mniej niż {lAbs} absolwentów pasujących",
+    "do podanych kryteriów lub ukończyli oni mniej niż {lSzk}",
+    "różne szkoły, w związku z czym wyniki nie mogą zostać pokazane.")
 )
 }
 \arguments{

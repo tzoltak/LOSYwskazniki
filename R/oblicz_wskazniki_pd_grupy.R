@@ -17,7 +17,7 @@
 #' - jeśli ich tam nie ma, zostaną zignorowane); domyślnie "typ_szk";
 #' przekazanie wektora tekstowego zerowej długości lub wartości `NULL` oznacza,
 #' że nie ma być żadnych takich zmiennych
-#' @param zmTylkoWartosciWdanych opcjonalnie lista z nazwanymi elementami,
+#' @param zmTylkoWartosciWDanych opcjonalnie lista z nazwanymi elementami,
 #' z których każdy jest wektorem tekstowym, opisujących dla jakich zestawów
 #' zmiennych mają zostać utworzone grupy tylko dla tych kombinacji wartości,
 #' które występują w danych wejściowych przekazanych argumentem `p4` (każdy
@@ -57,10 +57,18 @@
 #' @param wyswietlPostep opcjonalnie wartość logiczna - czy wyświetlać pasek
 #' postępu obrazujący postęp obliczeń? (domyślnie `TRUE`)
 #' `poziom`)
+#' @param liczbaWatkow opcjonalnie dodatnia liczba całkowita - liczba wątków,
+#' w których ma być wywoływana funkcja [oblicz_wskazniki_pd()]; uwaga, jeśli
+#' dane przekazywane argumentami `p4` i `p3` są relatywnie *małe* (np.
+#' absolwenci z jednego powiatu), wielowątkowość może wręcz wydłużać czas
+#' obliczeń - p. sekcja *details* w dokumentacji funkcji
+#' [oblicz_wskazniki_pd_jst()]; ogólnie biorąc, niezależnie od warunków wartości
+#' większe niż 3 raczej nie prowadzą już do odczuwalnego skrócenia czasu
+#' obliczeń; domyślnie 1, tj. bez zrównoleglania
 #' @param zwrocTylkoMatryce opcjonalnie wartość logiczna - czy zwrócić samą
 #' *matrycę* grup, bez obliczania wartości wskaźników? przydatne do
 #' eksperymentowania ze skutkami modyfikowania wartości argumentu
-#' `zmTylkoWartosciWdanych`; domyślnie `FALSE`
+#' `zmTylkoWartosciWDanych`; domyślnie `FALSE`
 #' @returns Ramka danych z kolumnami:
 #' -    `rok_abs`,
 #' -    kolumnami podanymi argumentem `zmGrupujace`, przekształconymi
@@ -73,18 +81,20 @@
 #'      liczba) lub skrótowiec opisujący kilka miesięcy (np. "r0_ivkw" -
 #'      IV kwartał roku ukończenia szkoły ponadpodstawowej),
 #' -    `wartosc` - kolumna-lista zawierająca wartości wskaźników
-#'      (p. [oblicz_wskazniki_pd()])
+#'      (p. [oblicz_wskazniki_pd()]).
 #' @seealso [oblicz_wskazniki_pd_jst()], [oblicz_wskazniki_pd()],
-#' [zanonimizuj_wskazniki_pd()]
+#' [dopisz_wskaznik_pd_liczba_abs()], [zanonimizuj_wskazniki_pd()],
+#' [uruchom_oblicz_wskazniki_pd()]
 #' @importFrom utils txtProgressBar setTxtProgressBar
-#' @importFrom dplyr %>% across all_of any_of distinct filter left_join mutate
-#'             pick select semi_join where
+#' @importFrom dplyr %>% across all_of any_of bind_rows distinct filter
+#'             left_join mutate pick select semi_join where
 #' @importFrom tidyr expand_grid unnest
 #' @export
 oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
                                       zmBezOgolem = "typ_szk",
-                                      zmTylkoWartosciWdanych =
-                                        list("typ_szk" = c("kod_zaw", "nazwa_zaw")),
+                                      zmTylkoWartosciWDanych =
+                                        list("typ_szk" = c("kod_zaw", "nazwa_zaw"),
+                                             "typ_szk" = c("mlodoc")),
                                       zmWskaznikiP4 = c("dyplom_zaw", "matura_zdana",
                                                         "typ_szk_kont6", "typ_szk_kont18",
                                                         "dyscyplina_kont6", "dyscyplina_kont18",
@@ -95,6 +105,7 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
                                       etykietaBrakDanych = "Ndt.",
                                       etykietaOgolem = "Ogółem",
                                       wyswietlPostep = TRUE,
+                                      liczbaWatkow = 1L,
                                       zwrocTylkoMatryce = FALSE) {
   stopifnot(is.data.frame(p3),
             all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p3)),
@@ -106,34 +117,38 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
                    "___wDanych___", "___wskazniki___") %in% names(p4)),
             is.character(zmGrupujace) | is.null(zmGrupujace),
             is.character(zmBezOgolem) | is.null(zmBezOgolem),
-            is.list(zmTylkoWartosciWdanych) | is.null(zmTylkoWartosciWdanych),
+            is.list(zmTylkoWartosciWDanych) | is.null(zmTylkoWartosciWDanych),
             is.character(etykietaBrakDanych), length(etykietaBrakDanych) == 1L,
             !is.na(etykietaBrakDanych),
             is.logical(wyswietlPostep), length(wyswietlPostep) == 1L,
             wyswietlPostep %in% c(FALSE, TRUE),
+            is.numeric(liczbaWatkow), length(liczbaWatkow) == 1L,
+            !anyNA(liczbaWatkow), is.finite(liczbaWatkow),
+            liczbaWatkow == as.integer(liczbaWatkow), liczbaWatkow > 0L,
             is.logical(zwrocTylkoMatryce), length(zwrocTylkoMatryce) == 1L,
             zwrocTylkoMatryce %in% c(FALSE, TRUE))
+  if (liczbaWatkow > 3L) warning("Testy empiryczne wskazują, że wywołanie z argumentem `liczbaWatkow` większym niż typowo 3 nie prowadzą do dalszego zmniejszania szybkości obliczeń.")
   if (is.null(zmGrupujace)) zmGrupujace <- vector(mode = "character", length = 0L)
   if (is.null(zmBezOgolem)) zmBezOgolem <- vector(mode = "character", length = 0L)
   stopifnot(!anyNA(zmGrupujace), !any((duplicated(zmGrupujace))),
             all(zmGrupujace %in% names(p4)),
             !anyNA(zmBezOgolem), !any((duplicated(zmBezOgolem))))
-  if (is.null(zmTylkoWartosciWdanych)) {
-    zmTylkoWartosciWdanych <- list(vector(mode = "character", length = 0L))
+  if (is.null(zmTylkoWartosciWDanych)) {
+    zmTylkoWartosciWDanych <- list(vector(mode = "character", length = 0L))
   }
-  for (i in seq_along(zmTylkoWartosciWdanych)) {
-    stopifnot(is.character(zmTylkoWartosciWdanych[[i]]),
-              !anyNA(zmTylkoWartosciWdanych[[i]]),
-              !any(duplicated(zmTylkoWartosciWdanych[[i]])))
-    zmTylkoWartosciWdanych[[i]] <- intersect(zmTylkoWartosciWdanych[[i]],
+  for (i in seq_along(zmTylkoWartosciWDanych)) {
+    stopifnot(is.character(zmTylkoWartosciWDanych[[i]]),
+              !anyNA(zmTylkoWartosciWDanych[[i]]),
+              !any(duplicated(zmTylkoWartosciWDanych[[i]])))
+    zmTylkoWartosciWDanych[[i]] <- intersect(zmTylkoWartosciWDanych[[i]],
                                              zmGrupujace) %>%
       intersect(names(p4))
   }
-  zmTylkoWartosciWdanych <-
-    zmTylkoWartosciWdanych[sapply(zmTylkoWartosciWdanych, length) > 0L]
-  stopifnot(all(names(zmTylkoWartosciWdanych) %in% names(p4)))
-  if (is.null(names(zmTylkoWartosciWdanych))) {
-    names(zmTylkoWartosciWdanych) <- rep("", length(zmTylkoWartosciWdanych))
+  zmTylkoWartosciWDanych <-
+    zmTylkoWartosciWDanych[sapply(zmTylkoWartosciWDanych, length) > 0L]
+  stopifnot(all(names(zmTylkoWartosciWDanych) %in% names(p4)))
+  if (is.null(names(zmTylkoWartosciWDanych))) {
+    names(zmTylkoWartosciWDanych) <- rep("", length(zmTylkoWartosciWDanych))
   }
   miesiace <- unique(p3$mies_od_ukoncz)
 
@@ -160,42 +175,43 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
                            })) %>%
       mutate("___tylkoWDanychNazwaOgolem___" = FALSE,
              "___wDanych___" = FALSE)
-    for (i in seq_along(zmTylkoWartosciWdanych)) {
+    for (i in seq_along(zmTylkoWartosciWDanych)) {
       matryca <- matryca %>%
         mutate("___tylkoWDanychOgolem___" =
-                 rowSums(pick(all_of(zmTylkoWartosciWdanych[[i]])) ==
-                           "Ogółem")) %>%
+                 rowSums(pick(all_of(zmTylkoWartosciWDanych[[i]])) ==
+                           etykietaOgolem)) %>%
         filter(.data$`___tylkoWDanychOgolem___` %in%
-                 c(0L, length(zmTylkoWartosciWdanych[[i]]))) %>%
+                 c(0L, length(zmTylkoWartosciWDanych[[i]]))) %>%
         left_join(p4 %>%
-                    select(any_of(c(names(zmTylkoWartosciWdanych)[i],
-                                    zmTylkoWartosciWdanych[[i]]))) %>%
+                    select(any_of(c(names(zmTylkoWartosciWDanych)[i],
+                                    zmTylkoWartosciWDanych[[i]]))) %>%
                     distinct() %>%
                     mutate("___wDanychI___" = TRUE),
-                  by = intersect(c(names(zmTylkoWartosciWdanych)[i],
-                                   zmTylkoWartosciWdanych[[i]]),
+                  by = intersect(c(names(zmTylkoWartosciWDanych)[i],
+                                   zmTylkoWartosciWDanych[[i]]),
                                  names(matryca))) %>%
         mutate("___wDanychI___" = ifelse(is.na(.data$`___wDanychI___`),
                                          FALSE, .data$`___wDanychI___`)) %>%
-        group_by(across(all_of(zmTylkoWartosciWdanych[[i]]))) %>%
+        group_by(across(all_of(c(names(zmTylkoWartosciWDanych)[i],
+                                 zmTylkoWartosciWDanych[[i]])))) %>%
         filter(any(.data$`___wDanychI___`) |
                  .data$`___tylkoWDanychOgolem___` > 0L) %>%
         ungroup()
-      if (names(zmTylkoWartosciWdanych)[i] != "") {
+      if (names(zmTylkoWartosciWDanych)[i] != "") {
         matryca <- matryca %>%
           mutate("___tylkoWDanychNazwaOgolem___" =
                    .data$`___tylkoWDanychNazwaOgolem___` |
-                   .data[[names(zmTylkoWartosciWdanych)[i]]] == "Ogółem") %>%
-          group_by(across(all_of(names(zmTylkoWartosciWdanych)[i]))) %>%
+                   .data[[names(zmTylkoWartosciWDanych)[i]]] == etykietaOgolem) %>%
+          group_by(across(all_of(names(zmTylkoWartosciWDanych)[i]))) %>%
           mutate("___wDanychI___" = .data$`___wDanychI___` |
                    (any(.data$`___wDanychI___`) &
                       rowSums(pick(all_of(
-                        zmTylkoWartosciWdanych[[i]])) == "Ogółem") ==
-                      length(zmTylkoWartosciWdanych[[i]]))) %>%
-          group_by(across(all_of(names(zmTylkoWartosciWdanych)[i]))) %>%
+                        zmTylkoWartosciWDanych[[i]])) == etykietaOgolem) ==
+                      length(zmTylkoWartosciWDanych[[i]]))) %>%
+          group_by(across(all_of(names(zmTylkoWartosciWDanych)[i]))) %>%
           filter(.data$`___tylkoWDanychOgolem___` == 0L |
                    (pick("___tylkoWDanychOgolem___", "___wDanychI___",
-                         all_of(zmTylkoWartosciWdanych[[i]])) |>
+                         all_of(zmTylkoWartosciWDanych[[i]])) |>
                       filter(.data$`___tylkoWDanychOgolem___` == 0L &
                                .data$`___wDanychI___`) |>
                       distinct() |>
@@ -207,9 +223,12 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
                  .data$`___wDanych___` | .data$`___wDanychI___`) %>%
         select(-"___wDanychI___")
     }
+    if (length(zmTylkoWartosciWDanych) > 0) {
+      matryca <- matryca %>%
+        filter(.data$`___tylkoWDanychNazwaOgolem___` |
+                 .data$`___wDanych___` %in% TRUE)
+    }
     matryca <- matryca %>%
-      filter(.data$`___tylkoWDanychNazwaOgolem___` |
-               .data$`___wDanych___` %in% TRUE) %>%
       select(-any_of(c("___tylkoWDanychNazwaOgolem___", "___wDanych___",
                        "___tylkoWDanychOgolem___")))
   } else {
@@ -218,28 +237,76 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
 
   if (zwrocTylkoMatryce) return(matryca)
   matryca$`___wskazniki___` <- vector(mode = "list", length = nrow(matryca))
-  if (wyswietlPostep) pb <- txtProgressBar(min = 0, max = nrow(matryca), style = 3)
-  for (i in seq_len(nrow(matryca))) {
-    zmNieOgolem <- setdiff(names(matryca)[as.vector(matryca[i, ] != "Ogółem")],
-                           "___wskazniki___")
-    if (length(zmNieOgolem) > 0L) {
-      p4Temp <- p4 %>%
-        semi_join(matryca[i, intersect(zmNieOgolem, names(matryca))],
-                  by = intersect(zmNieOgolem, names(matryca)))
-    } else {
-      p4Temp <- p4
+  if (liczbaWatkow > 1L) {
+    cl <- parallel::makeCluster(min(c(liczbaWatkow,
+                                      parallel::detectCores() - 1L,
+                                      nrow(matryca))))
+    parallel::clusterEvalQ(cl, {
+      library(dplyr)
+      library(LOSYwskazniki)
+    })
+    matryca <- split(matryca, seq_len(nrow(matryca)))
+    matryca <- parallel::parLapply(cl, matryca, uruchom_oblicz_wskazniki_pd,
+                                   p4 = p4, p3 = p3,
+                                   etykietaOgolem = etykietaOgolem,
+                                   zmWskaznikiP4 = zmWskaznikiP4,
+                                   zmWskaznikiP3 = zmWskaznikiP3,
+                                   statystyki = statystyki,
+                                   wskTylkoNiezerowe = wskTylkoNiezerowe,
+                                   miesiace = miesiace) %>%
+      bind_rows()
+    parallel::stopCluster(cl)
+  } else {
+    if (wyswietlPostep) pb <- txtProgressBar(min = 0, max = nrow(matryca), style = 3)
+    for (i in seq_len(nrow(matryca))) {
+      matryca$`___wskazniki___`[[i]] <- uruchom_oblicz_wskazniki_pd(
+        matryca[i, ], p4 = p4, p3 = p3, etykietaOgolem = etykietaOgolem,
+        zmWskaznikiP4 = zmWskaznikiP4, zmWskaznikiP3 = zmWskaznikiP3,
+        statystyki = statystyki, wskTylkoNiezerowe = wskTylkoNiezerowe,
+        miesiace = miesiace)$`___wskazniki___`[[1]]
+      if (wyswietlPostep) setTxtProgressBar(pb, i)
     }
-    matryca$`___wskazniki___`[[i]] <-
-      oblicz_wskazniki_pd(p4 = p4Temp,
-                          p3 = semi_join(p3, p4Temp,
-                                         by = c("id_abs", "rok_abs")),
-                          zmWskaznikiP4 = zmWskaznikiP4,
-                          zmWskaznikiP3 = zmWskaznikiP3,
-                          statystyki = statystyki,
-                          wskTylkoNiezerowe = wskTylkoNiezerowe,
-                          miesiace = miesiace)
-    if (wyswietlPostep) setTxtProgressBar(pb, i)
+    if (wyswietlPostep) close(pb)
   }
-  if (wyswietlPostep) close(pb)
   return(unnest(matryca, "___wskazniki___"))
+}
+#' @title Nieeksportowane funkcje wykorzystywane w agregowaniu wskaznikow w nierozlacznych podgrupach do publicznej prezentacji
+#' @description
+#' Dla zadanej kombinacji zmiennych grupujących funkcja odpowiednio zawęża dane
+#' i wywołuje na nich [oblicz_wskazniki_pd()]. Wykorzystywana wewnątrz
+#' [oblicz_wskazniki_pd_grupy()].
+#' @inheritParams oblicz_wskazniki_pd_grupy
+#' @inheritParams oblicz_wskazniki_pd
+#' @param wierszMatrycy ramka danych o jednym wierszu, zawierająca kolumny
+#' opisujące zmienne grupujące oraz kolumnę-listę `___wskazniki___`, w której
+#' zostaną umieszczone wyniki wywołania [oblicz_wskazniki_pd()].
+#' @returns `wierszMatrycy` z wypełnioną kolumną `___wskazniki___`.
+#' @details
+#' Funkcja została wyodrębniona na potrzeby zrównoleglania wywoływania
+#' [oblicz_wskazniki_pd()] wewnątrz [oblicz_wskazniki_pd_grupy()].
+#' @importFrom dplyr semi_join
+uruchom_oblicz_wskazniki_pd <- function(wierszMatrycy, p4, p3, etykietaOgolem,
+                                        zmWskaznikiP4, zmWskaznikiP3,
+                                        statystyki, wskTylkoNiezerowe, miesiace) {
+  zmNieOgolem <-
+    setdiff(names(wierszMatrycy)[as.vector(wierszMatrycy != etykietaOgolem)],
+            "___wskazniki___")
+  if (length(zmNieOgolem) > 0L) {
+    p4Temp <- semi_join(p4,
+                        wierszMatrycy[, intersect(zmNieOgolem,
+                                                  names(wierszMatrycy))],
+                        by = intersect(zmNieOgolem, names(wierszMatrycy)))
+  } else {
+    p4Temp <- p4
+  }
+  wierszMatrycy$`___wskazniki___`[[1]] <-
+    oblicz_wskazniki_pd(p4 = p4Temp,
+                        p3 = semi_join(p3, p4Temp,
+                                       by = c("id_abs", "rok_abs")),
+                        zmWskaznikiP4 = zmWskaznikiP4,
+                        zmWskaznikiP3 = zmWskaznikiP3,
+                        statystyki = statystyki,
+                        wskTylkoNiezerowe = wskTylkoNiezerowe,
+                        miesiace = miesiace)
+  return(wierszMatrycy)
 }

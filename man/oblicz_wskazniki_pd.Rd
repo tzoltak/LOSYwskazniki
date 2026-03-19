@@ -145,5 +145,5 @@ same braki danych).
 }
 \seealso{
 \code{\link[=oblicz_wskazniki_pd_jst]{oblicz_wskazniki_pd_jst()}}, \code{\link[=oblicz_wskazniki_pd_grupy]{oblicz_wskazniki_pd_grupy()}},
-\code{\link[=zanonimizuj_wskazniki_pd]{zanonimizuj_wskazniki_pd()}}
+\code{\link[=dopisz_wskaznik_pd_liczba_abs]{dopisz_wskaznik_pd_liczba_abs()}}, \code{\link[=zanonimizuj_wskazniki_pd]{zanonimizuj_wskazniki_pd()}}
 }

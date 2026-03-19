@@ -9,7 +9,8 @@ oblicz_wskazniki_pd_grupy(
   p3,
   zmGrupujace,
   zmBezOgolem = "typ_szk",
-  zmTylkoWartosciWdanych = list(typ_szk = c("kod_zaw", "nazwa_zaw")),
+  zmTylkoWartosciWDanych = list(typ_szk = c("kod_zaw", "nazwa_zaw"), typ_szk =
+    c("mlodoc")),
   zmWskaznikiP4 = c("dyplom_zaw", "matura_zdana", "typ_szk_kont6", "typ_szk_kont18",
     "dyscyplina_kont6", "dyscyplina_kont18", "sr_wynagr_r1"),
   zmWskaznikiP3 = c("status", "bezrobocie"),
@@ -18,6 +19,7 @@ oblicz_wskazniki_pd_grupy(
   etykietaBrakDanych = "Ndt.",
   etykietaOgolem = "Ogółem",
   wyswietlPostep = TRUE,
+  liczbaWatkow = 1L,
   zwrocTylkoMatryce = FALSE
 )
 }
@@ -46,7 +48,7 @@ przekazanie wektora tekstowego zerowej długości lub wartości \code{NULL} ozna
 że nie ma być żadnych takich zmiennych
 }}
 
-\item{zmTylkoWartosciWdanych}{opcjonalnie lista z nazwanymi elementami,
+\item{zmTylkoWartosciWDanych}{opcjonalnie lista z nazwanymi elementami,
 z których każdy jest wektorem tekstowym, opisujących dla jakich zestawów
 zmiennych mają zostać utworzone grupy tylko dla tych kombinacji wartości,
 które występują w danych wejściowych przekazanych argumentem \code{p4} (każdy
@@ -116,10 +118,19 @@ grupującej; domyślnie "Ogółem"}
 postępu obrazujący postęp obliczeń? (domyślnie \code{TRUE})
 \code{poziom})}
 
+\item{liczbaWatkow}{opcjonalnie dodatnia liczba całkowita - liczba wątków,
+w których ma być wywoływana funkcja \code{\link[=oblicz_wskazniki_pd]{oblicz_wskazniki_pd()}}; uwaga, jeśli
+dane przekazywane argumentami \code{p4} i \code{p3} są relatywnie \emph{małe} (np.
+absolwenci z jednego powiatu), wielowątkowość może wręcz wydłużać czas
+obliczeń - p. sekcja \emph{details} w dokumentacji funkcji
+\code{\link[=oblicz_wskazniki_pd_jst]{oblicz_wskazniki_pd_jst()}}; ogólnie biorąc, niezależnie od warunków wartości
+większe niż 3 raczej nie prowadzą już do odczuwalnego skrócenia czasu
+obliczeń; domyślnie 1, tj. bez zrównoleglania}
+
 \item{zwrocTylkoMatryce}{opcjonalnie wartość logiczna - czy zwrócić samą
 \emph{matrycę} grup, bez obliczania wartości wskaźników? przydatne do
 eksperymentowania ze skutkami modyfikowania wartości argumentu
-\code{zmTylkoWartosciWdanych}; domyślnie \code{FALSE}}
+\code{zmTylkoWartosciWDanych}; domyślnie \code{FALSE}}
 }
 \value{
 Ramka danych z kolumnami:
@@ -135,7 +146,7 @@ zasady miesiąc od ukończenia szkoły ponadpodstawowej (jeśli jest to
 liczba) lub skrótowiec opisujący kilka miesięcy (np. "r0_ivkw" -
 IV kwartał roku ukończenia szkoły ponadpodstawowej),
 \item \code{wartosc} - kolumna-lista zawierająca wartości wskaźników
-(p. \code{\link[=oblicz_wskazniki_pd]{oblicz_wskazniki_pd()}})
+(p. \code{\link[=oblicz_wskazniki_pd]{oblicz_wskazniki_pd()}}).
 }
 }
 \description{
@@ -145,5 +156,6 @@ podanych zmiennych (\emph{grupujących/niezależnych}).
 }
 \seealso{
 \code{\link[=oblicz_wskazniki_pd_jst]{oblicz_wskazniki_pd_jst()}}, \code{\link[=oblicz_wskazniki_pd]{oblicz_wskazniki_pd()}},
-\code{\link[=zanonimizuj_wskazniki_pd]{zanonimizuj_wskazniki_pd()}}
+\code{\link[=dopisz_wskaznik_pd_liczba_abs]{dopisz_wskaznik_pd_liczba_abs()}}, \code{\link[=zanonimizuj_wskazniki_pd]{zanonimizuj_wskazniki_pd()}},
+\code{\link[=uruchom_oblicz_wskazniki_pd]{uruchom_oblicz_wskazniki_pd()}}
 }

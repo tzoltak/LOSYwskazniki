@@ -44,8 +44,12 @@
 #' @export
 przygotuj_wskazniki_pd_toJSON <-
   function(x,
-           komunikatBrakDanych = "W danych nie ma absolwentów pasujących do podanych kryteriów.",
-           komunikatCenzura = "W danych było mniej niż {lAbs} absolwentów pasujących do podanych kryteriów lub ukończyli oni mniej niż {lSzk} różne szkoły, w związku z czym wyniki nie mogą zostać pokazane.") {
+           komunikatBrakDanych =
+             "W danych nie ma absolwentów pasujących do podanych kryteriów.",
+           komunikatCenzura =
+             paste("W danych było mniej niż {lAbs} absolwentów pasujących",
+                   "do podanych kryteriów lub ukończyli oni mniej niż {lSzk}",
+                   "różne szkoły, w związku z czym wyniki nie mogą zostać pokazane.")) {
   stopifnot(is.data.frame(x),
             is.character(komunikatBrakDanych), length(komunikatBrakDanych) == 1L,
             is.character(komunikatCenzura), length(komunikatCenzura) == 1L)
