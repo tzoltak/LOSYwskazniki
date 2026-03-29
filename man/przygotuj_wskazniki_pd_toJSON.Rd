@@ -63,5 +63,5 @@ Funkcja przekształca wskaźniki obliczone przez funkcję \code{\link[=oblicz_ws
 ich w formacie JSON przy pomocy funkcji \code{toJSON()} z pakietu \emph{jsonlite}.
 }
 \seealso{
-\code{\link[=zanonimizuj_wskazniki_pd]{zanonimizuj_wskazniki_pd()}}
+\code{\link[=zanonimizuj_wskazniki_pd]{zanonimizuj_wskazniki_pd()}}, \code{\link[=zapisz_wskazniki_pd_jst]{zapisz_wskazniki_pd_jst()}}
 }

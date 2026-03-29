@@ -1,8 +1,14 @@
+# LOSYwskazniki 0.7.0 (02.04.2026)
+
+## Nowe funkcje
+
+-   `zapisz_wskazniki_pd_jst()` automatyzuje proces zapisu wskaźników obliczonych przy pomocy `oblicz_wskazniki_pd_jst()` do plików JSON.
+
 # LOSYwskazniki 0.6.0 (22.03.2026)
 
 ## Nowe funkcje
 
--   `dopisz_wskaznik_pd_liczba_abs` pozwala dodać do zestawienia zagregowanych wskaźników w formie odpowiedniej do wykorzystania w zastosowaniach, w których takie zestawienia wskaźników mają być publicznie dostępne (np. w interaktywnych raportach przygotowanych w formie statycznych stron www) wskaznik opisujący liczbę absolwentów (obliczany na podstawie atrybutów wskazanego, już wcześniej obliczonego wskaźnika).
+-   `dopisz_wskaznik_pd_liczba_abs()` pozwala dodać do zestawienia zagregowanych wskaźników w formie odpowiedniej do wykorzystania w zastosowaniach, w których takie zestawienia wskaźników mają być publicznie dostępne (np. w interaktywnych raportach przygotowanych w formie statycznych stron www) wskaznik opisujący liczbę absolwentów (obliczany na podstawie atrybutów wskazanego, już wcześniej obliczonego wskaźnika).
 
 ## Zmiany nazw argumentów funkcji
 

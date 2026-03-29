@@ -40,7 +40,7 @@
 #' będzie listą jednoelementową, zawierającą jedynie element odpowiednio
 #' `brakDanych` albo `cenzura`, będących ciągiem znaków (nie będzie jednak
 #' zawierał ani elementu `w`, ani elementu `a`).
-#' @seealso [zanonimizuj_wskazniki_pd()]
+#' @seealso [zanonimizuj_wskazniki_pd()], [zapisz_wskazniki_pd_jst()]
 #' @export
 przygotuj_wskazniki_pd_toJSON <-
   function(x,
