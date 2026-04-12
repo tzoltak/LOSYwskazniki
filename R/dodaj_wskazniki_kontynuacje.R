@@ -54,6 +54,9 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
             !anyNA(p4$id_abs), !anyNA(p4$rok_abs),
             is.logical(tylkoLegalne), length(tylkoLegalne) == 1L,
             !is.na(tylkoLegalne))
+  p2 <- p2 %>%
+    semi_join(p4,
+              by = c("id_abs", "rok_abs"))
   brakujaceMiesiace <- split(p2$mies_od_ukoncz, p2$rok_abs) %>%
     lapply(function(x, miesOdUkoncz) {return(setdiff(miesOdUkoncz, unique(x)))},
            miesOdUkoncz = miesOdUkoncz)

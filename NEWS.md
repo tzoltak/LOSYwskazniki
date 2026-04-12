@@ -1,3 +1,10 @@
+# LOSYwskazniki 0.7.1 (12.04.2026)
+
+## Naprawione błędy
+
+-  `oblicz_wskaznik_macierz()` obsługuje sytuację, gdy przekazana zostanie do niej ramka danych o zerowej liczbie wierszy;
+-  `dodaj_wskazniki_kontynuacje()` zawęża zakres danych przekazanych argumentem `p2` do wierszy opisujących absolwentów występujących w danych przekazanych argumentem `p4` zanim zacznie generować ostrzeżenia o niekompletności danych w `p2`.
+
 # LOSYwskazniki 0.7.0 (02.04.2026)
 
 ## Nowe funkcje

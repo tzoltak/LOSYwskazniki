@@ -52,8 +52,8 @@ oblicz_wskaznik_macierz <- function(x, zm,
             is.character(zm), length(zm) == 1L, !is.na(zm),
             zm %in% names(x),
             is.null(wszystkieObs) | is.data.frame(wszystkieObs),
-            is.character(zestawWartosci), length(zestawWartosci) > 1L,
-            !anyNA(zestawWartosci))
+            is.character(zestawWartosci), !anyNA(zestawWartosci))
+  if (nrow(x) > 0L) stopifnot(length(zestawWartosci) > 1L)
   zmDoLaczenia <- setdiff(names(x), zm)
   if (!is.null(wszystkieObs)) {
     stopifnot(all(c("id_abs", "rok_abs") %in% names(wszystkieObs)),
@@ -79,6 +79,10 @@ oblicz_wskaznik_macierz <- function(x, zm,
     wszystkieObs <- x %>%
       select(all_of(zmDoLaczenia)) %>%
       distinct()
+  }
+  if (nrow(x) == 0L) {
+    return(x |>
+             select(all_of(c(zmDoLaczenia, zm))))
   }
 
   x <- lapply(zestawWartosci,
