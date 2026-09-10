@@ -1,7 +1,7 @@
 Package: LOSYwskazniki
 Type: Package
 Title: Wskazniki opisujace sytuacje poszczegolnych absolwentow w systemie monitoringu karier absolwentow szkol ponadpodstawowych
-Version: 0.7.1
+Version: 0.7.1.999
 Authors@R: c(
     person(
       "Tomasz", "Żółtak",
@@ -25,4 +25,4 @@ LazyData: true
 Language: pl
 Roxygen: list(markdown = TRUE)
 NeedsCompilation: no
-RoxygenNote: 7.3.3
+Config/roxygen2/version: 8.0.0

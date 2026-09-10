@@ -85,5 +85,5 @@ być ekstremalnie duże (jeśli tylko uzyje się nieco szerszego zestawu
 zmiennych grupujących).
 
 Wewnątrz wykorzystywana jest funkcje \code{\link[=przygotuj_wskazniki_pd_toJSON]{przygotuj_wskazniki_pd_toJSON()}},
-a następnie \code{\link[jsonlite:fromJSON]{jsonlite::toJSON()}}.
+a następnie \code{\link[jsonlite:toJSON]{jsonlite::toJSON()}}.
 }

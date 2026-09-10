@@ -1,3 +1,15 @@
+# LOSYwskazniki 0.7.2 (??.??.????)
+
+## Do zrobienia
+
+-  Dać możliwość wywoływania `oblicz_wskazniki_pd()`, `oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_jst()` z argumentem `p4=NULL` (o ile tylko towarzyszy temu `zmWskaznikiP4=NULL` lub `zmWskaznikiP4` jest wektorem zerowej długości);
+-  `oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_jst()` wywoływane z wielowątkowością mogłyby też szybko przycinać `p3` i `p4` tylko do niezbędnych zmiennych, żeby ograniczyć swój ślad pamięciowy.
+
+## Naprawione błędy
+
+-  `oblicz_wskazniki_pd()` obliczając wskaźniki na podstawie kolumn *macierzowych* poprawnie oblicza argumenty `lAbs`, `lSzk`, `lZadenZWymienionych` i `lNieDotyczy`, identyfikując rekordy, których wskaźnik nie dotyczy patrząc po wierszach, a nie jak dotąd - błędnie - po kolumnach;
+-  W `oblicz_wskazniki_pd_jst` zmieniono nazwę argumentu `liczbaWatkow` na `liczbaWatkowJST`, zgodnie z opisem w części dokumentacji dotyczącym optymalnego wyboru liczby wątków.
+
 # LOSYwskazniki 0.7.1 (12.04.2026)
 
 ## Naprawione błędy

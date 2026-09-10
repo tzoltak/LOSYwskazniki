@@ -92,22 +92,21 @@
 #' z powyższym opisem, który ma dodatkowo przypisane atrybuty
 #' (p. [attributes()]), z których każdy jest liczbą naturalną:
 #'
-#' -    `lAbs` - liczba wierszy (absolwentów), na podstawie których został
-#'      obliczony zagregowany wskaźnik,
-#' -    `lSzk` - liczba różnych szkół, które ukończyli absolwenci, na podstawie
-#'      których został obliczony zagregowany wskaźnik,
-#' -    `lNieDotyczy` - liczba wierszy (absolwentów), zawierających braki danych
-#'       (w przypadku kolumn wejściowych będących macierzami - we wszystkich
-#'       kolumnach macierzy),
-#' -   Wskaźniki zagregowane obliczone na podstawie takich kolumn
+#' -   `lAbs` - liczba wierszy (absolwentów), na podstawie których został
+#'     obliczony zagregowany wskaźnik,
+#' -   `lSzk` - liczba różnych szkół, które ukończyli absolwenci, na podstawie
+#'     których został obliczony zagregowany wskaźnik,
+#' -   `lNieDotyczy` - liczba wierszy (absolwentów), zawierających braki danych
+#'     (w przypadku kolumn wejściowych będących macierzami - we wszystkich
+#'     kolumnach macierzy),
+#' -   Wskaźniki zagregowane obliczone na podstawie kolumn macierzowych
 #'     mają dodatkowy atrybut `lZadenZWymienionych`, który przechowuje
 #'     liczbę wierszy, w których wszystkie kolumny macierzy były albo
 #'     zerami albo brakami danych (ale z pominięciem wierszy zawierających
 #'     same braki danych).
 #' @seealso [oblicz_wskazniki_pd_jst()], [oblicz_wskazniki_pd_grupy()],
 #' [dopisz_wskaznik_pd_liczba_abs()], [zanonimizuj_wskazniki_pd()]
-#' @importFrom dplyr %>% .data across all_of any_of everything mutate n_distinct
-#'             reframe rename_with select where
+#' @importFrom dplyr %>% .data across all_of any_of everything mutate n_distinct reframe rename_with select where
 #' @importFrom tidyr pivot_longer
 #' @export
 oblicz_wskazniki_pd <- function(p4, p3,
@@ -215,14 +214,12 @@ oblicz_wskazniki_pd <- function(p4, p3,
                      ~list(structure(colSums(.[, colSums(!is.na(.)) != 0,
                                                drop = FALSE],
                                              na.rm = TRUE),
-                                     lAbs = nrow(.) -
-                                       sum(colSums(!is.na(.)) == 0 &
-                                             colSums(!is.na(.)) > 0),
-                                     lSzk = n_distinct(.data$id_szk[colSums(!is.na(.)) > 0]),
+                                     lAbs = nrow(.) - sum(rowSums(!is.na(.)) == 0),
+                                     lSzk = n_distinct(.data$id_szk[rowSums(!is.na(.)) > 0]),
                                      lZadenZWymienionych =
-                                       sum(colSums(., na.rm = TRUE) == 0 &
-                                             colSums(!is.na(.)) > 0),
-                                     lNieDotyczy = sum(colSums(!is.na(.)) == 0)))),
+                                       sum(rowSums(., na.rm = TRUE) == 0 &
+                                             rowSums(!is.na(.)) > 0),
+                                     lNieDotyczy = sum(rowSums(!is.na(.)) == 0)))),
               # gdy brak danych, wskaźniki macierzowe wymagają innego potraktowania
               across(c(where(is.matrix) & where(~length(.x) == 0),
                        -any_of(c("id_abs", "rok_abs", "id_szk"))),

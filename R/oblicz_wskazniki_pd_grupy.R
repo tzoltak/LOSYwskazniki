@@ -86,8 +86,7 @@
 #' [dopisz_wskaznik_pd_liczba_abs()], [zanonimizuj_wskazniki_pd()],
 #' [uruchom_oblicz_wskazniki_pd()]
 #' @importFrom utils txtProgressBar setTxtProgressBar
-#' @importFrom dplyr %>% across all_of any_of bind_rows distinct filter
-#'             left_join mutate pick select semi_join where
+#' @importFrom dplyr %>% across all_of any_of bind_rows distinct filter left_join mutate pick select semi_join where
 #' @importFrom tidyr expand_grid unnest
 #' @export
 oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,

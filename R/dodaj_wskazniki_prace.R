@@ -42,8 +42,7 @@
 #'   p3agr <- dodaj_wskazniki_prace(NULL, p3)
 #'   str(p3agr)
 #' }
-#' @importFrom dplyr %>% .data across case_match distinct filter full_join
-#'                  left_join mutate select semi_join
+#' @importFrom dplyr %>% .data across case_match distinct filter full_join left_join mutate select semi_join
 #' @export
 dodaj_wskazniki_prace <- function(p4, p3) {
   stopifnot(is.data.frame(p3),

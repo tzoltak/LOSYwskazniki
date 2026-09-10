@@ -15,7 +15,7 @@
 #' uniemożliwia raportowanie postępu na poziomie wyższym niż 1 - oraz
 #' `liczbaWatkow` - zrównoleglanie na tym poziomie uniemożliwia raportowanie
 #' postępu); domyślnie 1
-#' @param liczbaWatkow opcjonalnie dodatnia liczba całkowita - liczba wątków,
+#' @param liczbaWatkowJST opcjonalnie dodatnia liczba całkowita - liczba wątków,
 #' w których ma być wywoływana funkcja [oblicz_wskazniki_pd_grupy()], p. sekcja
 #' *details* poniżej; domyślnie 1, tj. bez zrównoleglania
 #' @param liczbaWatkowGrupy opcjonalnie dodatnia liczba całkowita, przekazywana
@@ -44,7 +44,7 @@
 #' i `liczbaWatkowGrupy` wyraźnie zależy od wartości argumentu `poziom`:
 #'
 #' -  Przy `poziom = "Polska"` nie ma możliwości zrównoleglania na poziomie JST,
-#'    więc wartości `liczbaWatkow` większe od 1 i tak zostaną zignorowane.
+#'    więc wartości `liczbaWatkowJST` większe od 1 i tak zostaną zignorowane.
 #'    Wszystkie wątki należy więc przypisać do poziomu grup, podając ich liczbę
 #'    argumentem `liczbaWatkowGrupy`. Testy empiryczne (p. [czasy_wskazniki_pd])
 #'    wykazały jednak, że odczuwalne skrócenie czasu obliczeń osiąga się dla
@@ -84,16 +84,16 @@ oblicz_wskazniki_pd_jst <- function(p4, p3,
                                     etykietaBrakDanych = "Ndt.",
                                     etykietaOgolem = "Ogółem",
                                     wyswietlPostep = 1,
-                                    liczbaWatkow = 1L, liczbaWatkowGrupy = 1L) {
+                                    liczbaWatkowJST = 1L, liczbaWatkowGrupy = 1L) {
   stopifnot(is.data.frame(p3),
             all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p3)),
             is.data.frame(p4),
             all(c("id_abs", "rok_abs", "id_szk") %in% names(p4)),
             is.numeric(wyswietlPostep), length(wyswietlPostep) == 1,
             wyswietlPostep %in% c(0, 1, 2),
-            is.numeric(liczbaWatkow), length(liczbaWatkow) == 1L,
-            !anyNA(liczbaWatkow), is.finite(liczbaWatkow),
-            liczbaWatkow == as.integer(liczbaWatkow), liczbaWatkow > 0L)
+            is.numeric(liczbaWatkowJST), length(liczbaWatkowJST) == 1L,
+            !is.na(liczbaWatkowJST), is.finite(liczbaWatkowJST),
+            liczbaWatkowJST == as.integer(liczbaWatkowJST), liczbaWatkowJST > 0L)
   poziom <- match.arg(poziom)
   if (nrow(anti_join(p4, p3,
                      by = c("id_abs", "rok_abs"))) > 0) {
@@ -117,10 +117,15 @@ oblicz_wskazniki_pd_jst <- function(p4, p3,
       distinct() %>%
       mutate(obszar = "Polska")
   }
+  if (any(zmGrupujace %in% names(matryca))) {
+    warning("Wśród nazw podanych argumentem `zmGrupujace` znajdują się nazwy zmiennych definiujących zadany podział terytorialny (zdefiniowany argumentem `poziom`). Zostaną one pominięte.",
+            immediate. = TRUE, call. = FALSE)
+    zmGrupujace <- setdiff(zmGrupujace, names(matryca))
+  }
 
   matryca$wskazniki <- vector(mode = "list", length = nrow(matryca))
-  if (liczbaWatkow > 1L & nrow(matryca) > 1L) {
-    cl <- parallel::makeCluster(min(c(liczbaWatkow,
+  if (liczbaWatkowJST > 1L & nrow(matryca) > 1L) {
+    cl <- parallel::makeCluster(min(c(liczbaWatkowJST,
                                       parallel::detectCores() - 1L,
                                       nrow(matryca))))
     parallel::clusterEvalQ(cl, {

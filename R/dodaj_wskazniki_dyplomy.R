@@ -47,8 +47,7 @@
 #'   table(p4$dyplom_zaw)
 #'   p4 <- dodaj_wskazniki_dyplomy(p4, p1, maksMiesOdUkoncz = 21L)
 #' }
-#' @importFrom dplyr %>% .data all_of arrange case_match coalesce distinct
-#'                   filter if_else left_join mutate select
+#' @importFrom dplyr %>% .data all_of arrange case_match coalesce distinct filter if_else left_join mutate select
 #' @export
 dodaj_wskazniki_dyplomy <- function(p4, p1, maksMiesOdUkoncz,
                                     rokMonitoringu = NULL) {

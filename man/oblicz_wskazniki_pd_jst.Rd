@@ -20,7 +20,7 @@ oblicz_wskazniki_pd_jst(
   etykietaBrakDanych = "Ndt.",
   etykietaOgolem = "Ogółem",
   wyswietlPostep = 1,
-  liczbaWatkow = 1L,
+  liczbaWatkowJST = 1L,
   liczbaWatkowGrupy = 1L
 )
 }
@@ -128,7 +128,7 @@ uniemożliwia raportowanie postępu na poziomie wyższym niż 1 - oraz
 \code{liczbaWatkow} - zrównoleglanie na tym poziomie uniemożliwia raportowanie
 postępu); domyślnie 1}
 
-\item{liczbaWatkow}{opcjonalnie dodatnia liczba całkowita - liczba wątków,
+\item{liczbaWatkowJST}{opcjonalnie dodatnia liczba całkowita - liczba wątków,
 w których ma być wywoływana funkcja \code{\link[=oblicz_wskazniki_pd_grupy]{oblicz_wskazniki_pd_grupy()}}, p. sekcja
 \emph{details} poniżej; domyślnie 1, tj. bez zrównoleglania}
 
@@ -170,7 +170,7 @@ Polski.
 i \code{liczbaWatkowGrupy} wyraźnie zależy od wartości argumentu \code{poziom}:
 \itemize{
 \item Przy \code{poziom = "Polska"} nie ma możliwości zrównoleglania na poziomie JST,
-więc wartości \code{liczbaWatkow} większe od 1 i tak zostaną zignorowane.
+więc wartości \code{liczbaWatkowJST} większe od 1 i tak zostaną zignorowane.
 Wszystkie wątki należy więc przypisać do poziomu grup, podając ich liczbę
 argumentem \code{liczbaWatkowGrupy}. Testy empiryczne (p. \link{czasy_wskazniki_pd})
 wykazały jednak, że odczuwalne skrócenie czasu obliczeń osiąga się dla

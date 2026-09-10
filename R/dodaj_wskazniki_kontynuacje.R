@@ -35,8 +35,7 @@
 #'   colSums(dodaj_wskazniki_kontynuacje(p4, p2, 6L, tylkoLegalne = FALSE)$typ_szk_kont6,
 #'           na.rm = TRUE)
 #' }
-#' @importFrom dplyr %>% .data bind_rows distinct filter full_join mutate select
-#'                   semi_join ungroup
+#' @importFrom dplyr %>% .data bind_rows distinct filter full_join mutate select semi_join ungroup
 #' @importFrom tidyr pivot_wider
 #' @export
 dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,

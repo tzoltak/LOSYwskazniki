@@ -136,7 +136,7 @@ których został obliczony zagregowany wskaźnik,
 \item \code{lNieDotyczy} - liczba wierszy (absolwentów), zawierających braki danych
 (w przypadku kolumn wejściowych będących macierzami - we wszystkich
 kolumnach macierzy),
-\item Wskaźniki zagregowane obliczone na podstawie takich kolumn
+\item Wskaźniki zagregowane obliczone na podstawie kolumn macierzowych
 mają dodatkowy atrybut \code{lZadenZWymienionych}, który przechowuje
 liczbę wierszy, w których wszystkie kolumny macierzy były albo
 zerami albo brakami danych (ale z pominięciem wierszy zawierających

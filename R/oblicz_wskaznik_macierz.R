@@ -40,8 +40,7 @@
 #' a wartość 0 na niezaistnienie.
 #' @seealso [dodaj_wskazniki_kontynuacje()]
 #' @importFrom stats setNames
-#' @importFrom dplyr %>% across all_of distinct everything full_join
-#'                   left_join matches mutate select
+#' @importFrom dplyr %>% across all_of distinct everything full_join left_join matches mutate select
 #' @export
 oblicz_wskaznik_macierz <- function(x, zm,
                                     zestawWartosci = unique(c(levels(x[[zm]]),
