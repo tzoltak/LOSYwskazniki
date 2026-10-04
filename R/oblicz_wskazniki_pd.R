@@ -6,7 +6,8 @@
 #' podzbiorem), musi zawierać co najmniej kolumny `id_abs`, `rok_abs` i `id_szk`
 #' @param p3 ramka danych z tabelą *pośrednią* P3 (lub jej odfiltrowanym
 #' podzbiorem), musi zawierać co najmniej kolumny `id_abs`, `rok_abs`
-#' i `mies_od_ukoncz`
+#' i `mies_od_ukoncz` lub `NULL` (jeśli `zmWskaznikiP3 ` nie podaje żadnych
+#' wskzaźników)
 #' @param statystyki opcjonalnie lista z nazwanymi elementami, opisującymi
 #' statystyki, które mają zostać obliczone w odniesieniu do wskaźników
 #' **liczbowych** (w formacie takim, jak argument `.fns` w formie listy
@@ -120,9 +121,7 @@ oblicz_wskazniki_pd <- function(p4, p3,
                                 oddzielCzasOdWskaznika = TRUE,
                                 format = c("długi", "szeroki"),
                                 miesiace = NULL) {
-  stopifnot(is.data.frame(p3),
-            all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p3)),
-            !anyNA(p3$id_abs), !anyNA(p3$rok_abs), !anyNA(p3$mies_od_ukoncz),
+  stopifnot(is.data.frame(p3) | is.null(p3),
             is.data.frame(p4),
             all(c("id_abs", "rok_abs", "id_szk") %in% names(p4)),
             !anyNA(p4$id_abs), !anyNA(p4$rok_abs), !anyNA(p4$id_szk),
@@ -133,6 +132,15 @@ oblicz_wskazniki_pd <- function(p4, p3,
             length(oddzielCzasOdWskaznika) == 1,
             oddzielCzasOdWskaznika %in% c(TRUE, FALSE),
             is.null(miesiace) | is.numeric(miesiace))
+  if (!is.null(p3)) {
+    stopifnot(all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p3)),
+              !anyNA(p3$id_abs), !anyNA(p3$rok_abs), !anyNA(p3$mies_od_ukoncz))
+  } else {
+    stopifnot(is.null(zmWskaznikiP3) | length(zmWskaznikiP3) == 0L) # w zasadzie wystarczyłby warunek na długość, ale tak jest bardziej czytelne
+    p3 <- data.frame(id_abs = vector(mode = "integer", length = 0L),
+                     rok_abs = vector(mode = "integer", length = 0L),
+                     mies_od_ukoncz = vector(mode = "integer", length = 0L))
+  }
   if (!is.null(miesiace)) {
     stopifnot(!anyNA(miesiace), !any(duplicated(miesiace)))
   }
@@ -145,11 +153,9 @@ oblicz_wskazniki_pd <- function(p4, p3,
   } else {
     zmWskaznikiP4 <- vector(mode = "character", length = 0L)
   }
-  if (!is.null(zmWskaznikiP3)) {
-    if (length(zmWskaznikiP3) > 0L ) {
-      stopifnot(!anyNA(zmWskaznikiP3), !any(duplicated(zmWskaznikiP3)),
-                all(zmWskaznikiP3 %in% names(p3)))
-    }
+  if (length(zmWskaznikiP3) > 0L) {
+    stopifnot(!anyNA(zmWskaznikiP3), !any(duplicated(zmWskaznikiP3)),
+              all(zmWskaznikiP3 %in% names(p3)))
   } else {
     zmWskaznikiP3 <- vector(mode = "character", length = 0L)
   }

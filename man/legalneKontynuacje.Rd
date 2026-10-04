@@ -5,7 +5,7 @@
 \alias{legalneKontynuacje}
 \title{Legalne kontynuacje nauki}
 \format{
-Ramka danych z 26 wierszami i 2 kolumnami:
+Ramka danych z 42 wierszami i 2 kolumnami:
 \itemize{
 \item{\code{typ_szk} - typ ukończonej szkoły (czynnik),}
 \item{\code{typ_szk_kont} - forma kontynuacji nauki (wektor ciągów znaków).}

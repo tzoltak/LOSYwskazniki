@@ -1,14 +1,23 @@
-# LOSYwskazniki 0.7.2 (??.??.????)
+# LOSYwskazniki 0.8.0 (04.10.2026)
 
-## Do zrobienia
+## Aktualizacje
 
--  Dać możliwość wywoływania `oblicz_wskazniki_pd()`, `oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_jst()` z argumentem `p4=NULL` (o ile tylko towarzyszy temu `zmWskaznikiP4=NULL` lub `zmWskaznikiP4` jest wektorem zerowej długości);
--  `oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_jst()` wywoływane z wielowątkowością mogłyby też szybko przycinać `p3` i `p4` tylko do niezbędnych zmiennych, żeby ograniczyć swój ślad pamięciowy.
+-  `dodaj_wskazniki_kontynuacje()` radzi sobie z `typ_szk` przyjmującą wartość "Liceum ogólnokształcące dla dorosłych" oraz `typ_szk_kont` przyjmującą wartości "Studia stacjonarne" i "Studia niestacjonarne".
+-  `dodaj_wskazniki_prace()` i `oblicz_wynagrodzenia_wzgledne()` domyślnie starają się obliczać (wszystkie) wskaźniki średnich wynagrodzeń na podstawie wartości zmiennej `wynagrodzenie_stawka`;
+   -  Dla zachowania kompatybilności z danymi z edycji wcześniejszych niż 2026, jeśli w przekazanych danych nie ma tej zmiennej, automatycznie - ale generując ostrzeżenie - starają się zamiast niej użyć zmiennych `wynagrodzenie` (wskaźniki *bezwzględne*) i `wynagrodzenie_uop` (wskaźniki *względne*);
+   -  Nowy argument `zmWynagrodzenie` pozwala uniknąć wygenerowania wspomnianego wyżej ostrzeżenia, a w przypadku `oblicz_wynagrodzenia_wzgledne()` również zupełnie dowolnie wskazać zmienną, na podstawie której mają zostać obliczone wskaźniki.
+
+## Udoskonalenia
+
+-  W wywołaniach `oblicz_wskazniki_pd()`, `oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_jst()` można podać argument `p3=NULL`, jeśli tylko jednocześnie `zmWskaznikiP3` jest `NULL` lub wektorem zerowej długości;
+-  `oblicz_wskazniki_pd_grupy()` ostrzega w przypadku wykrycia, że wśród nazw zmiennych przekazanych argumentem `zmGrupujące` jest "id_abs";
+-  `oblicz_wskazniki_pd_grupy()` (wywołane z wielowątkowością na poziomie JST) i `oblicz_wskazniki_pd_jst()` (zawsze) niezwłocznie przycinają zawartość ramek danych przekazanych argumentami `p4` i `p3` tylko do wykorzystywanych zmiennych, co pozwala wyraźnie zmniejszyć ślad pamięciowy w wywołaniach ze zrównoleglaniem obliczeń.
 
 ## Naprawione błędy
 
 -  `oblicz_wskazniki_pd()` obliczając wskaźniki na podstawie kolumn *macierzowych* poprawnie oblicza argumenty `lAbs`, `lSzk`, `lZadenZWymienionych` i `lNieDotyczy`, identyfikując rekordy, których wskaźnik nie dotyczy patrząc po wierszach, a nie jak dotąd - błędnie - po kolumnach;
--  W `oblicz_wskazniki_pd_jst` zmieniono nazwę argumentu `liczbaWatkow` na `liczbaWatkowJST`, zgodnie z opisem w części dokumentacji dotyczącym optymalnego wyboru liczby wątków.
+-  W `oblicz_wskazniki_pd_jst` zmieniono nazwę argumentu `liczbaWatkow` na `liczbaWatkowJST`, zgodnie z opisem w części dokumentacji dotyczącym optymalnego wyboru liczby wątków;
+-  `oblicz_wskazniki_pd_grupy()` radzi sobie w sytuacji, gdy wśród nazw podanych argumentem `zmGrupujace` występuje "rok_abs" lub "id_abs".
 
 # LOSYwskazniki 0.7.1 (12.04.2026)
 

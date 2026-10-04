@@ -30,7 +30,8 @@ podzbiorem), musi zawierać co najmniej kolumny \code{id_abs}, \code{rok_abs} i 
 
 \item{p3}{ramka danych z tabelą \emph{pośrednią} P3 (lub jej odfiltrowanym
 podzbiorem), musi zawierać co najmniej kolumny \code{id_abs}, \code{rok_abs}
-i \code{mies_od_ukoncz}}
+i \code{mies_od_ukoncz} lub \code{NULL} (jeśli \code{zmWskaznikiP3 } nie podaje żadnych
+wskzaźników)}
 
 \item{poziom}{opcjonalnie ciąg znaków - poziom podziału terytorialnego, na
 jakim mają zostać obliczone wskaźniki: "Polska", "wojewodztwa" lub "powiaty";
@@ -163,7 +164,7 @@ IV kwartał roku ukończenia szkoły ponadpodstawowej),
 \description{
 Funkcja pozwala obliczyć zestawienia zagregowanych wskaźników z danej edycji
 monitoringu dla każdej JST na podanym poziomie podziału terytorialnego
-Polski.
+Polski (w przecięciu z kohortą absolwentów, opisną zmienną \code{rok_abs}).
 }
 \details{
 \strong{Wielowątkowość:} rozsądny dobór wartości parametrów \code{liczbaWatkow}

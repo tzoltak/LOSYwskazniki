@@ -4,7 +4,11 @@
 \alias{dodaj_wskazniki_prace}
 \title{Obliczanie wskaznikow wykorzystywanych w raportach}
 \usage{
-dodaj_wskazniki_prace(p4, p3)
+dodaj_wskazniki_prace(
+  p4,
+  p3,
+  zmWynagrodzenie = c("wynagrodzenie_stawka", "wynagrodzenie")
+)
 }
 \arguments{
 \item{p4}{ramka danych z tabelą \emph{pośrednią} P4 (lub jej odfiltrowanym
@@ -14,6 +18,15 @@ jeśli nie ma potrzeby dołączania obliczonych wskaźników do tabeli
 
 \item{p3}{ramka danych z tabelą \emph{pośrednią} P3 (lub jej odfiltrowanym
 podzbiorem)}
+
+\item{zmWynagrodzenie}{ciąg znaków wskazujący, na podstawie których
+zmiennych mają być obliczone wskaźniki średnich wynagrodzeń: dostępne są
+tylko dwie opcje: "wynagrodzenie" - co oznacza wykorzystanie zmiennych
+\code{wynagrodzenie} i \code{wynagrodzenie_uop} do obliczenia wskaźników odpowiednio
+\emph{bezwzględnych} i \emph{względnych} - oraz "wynagrodzenie_stawka" - co oznacza
+wykorzystanie zmiennej \code{wynagrodzenie_stawka} do obliczenia obu typów
+wskaźników (\code{wynagrodzenie_stawka} jest określona tylko dla zatrudnionych
+na umowy o pracę)}
 }
 \value{
 Ramka danych przekazana argumentem \code{p4} (lub - jeśli argument \code{p4}
@@ -21,15 +34,13 @@ został ustawiony na \code{NULL} - ramka danych z unikalnymi kombinacjami warto�
 zmiennych (\code{id_abs}, \code{rok_abs}) występującym w ramce danych przekazanej
 argumentem \code{p3}) z dodanymi kolumnami:
 \itemize{
-\item \code{sr_wynagr_r0_ivkw} - średnie wynagrodzenia w IV kw. roku ukończenia szkoły,
-\item \code{sr_wynagr_r1} - średnie wynagrodzenia w roku następującym po roku ukończenia szkoły,
-\item \code{sr_wynagr_r1_ikw} - średnie wynagrodzenia w I kw. roku następującym po roku ukończenia szkoły,
-\item \code{sr_wynagr_r2_ikw} - średnie wynagrodzenia w I kw. roku następującego w dwa lata po roku ukończenia szkoły,
-\item \code{sr_wynagr_r2} - średnie wynagrodzenia w roku następującym w dwa lata po roku ukończenia szkoły,
-\item \code{sr_wynagr_r3} - średnie wynagrodzenia w roku następującym w trzy lata po roku ukończenia szkoły,
-\item \code{sr_wynagr_r4} - średnie wynagrodzenia w roku następującym w cztery lata po roku ukończenia szkoły,
-\item \code{sr_wynagr_uop_nauka_r0_wrzgru} - średnie relatywne (odniesione do średnich miesięcznych wynagrodzeń w powiecie w danym roku) wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły w miesiącach kontynuowania nauki,
-\item \code{sr_wynagr_uop_bez_nauki_r0_wrzgru} - średnie relatywne (odniesione do średnich miesięcznych wynagrodzeń w powiecie w danym roku) wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły w miesiącach niekontynuowania nauki,
+\item \verb{sr_wynagr_(|stawka)r0_ivkw} - średnie wynagrodzenia w IV kw. roku ukończenia szkoły,
+\item \verb{sr_wynagr_(|stawka)r1} - średnie wynagrodzenia w roku następującym po roku ukończenia szkoły,
+\item \verb{sr_wynagr_(|stawka)r1_ikw} - średnie wynagrodzenia w I kw. roku następującym po roku ukończenia szkoły,
+\item \verb{sr_wynagr_(|stawka)r2_ikw} - średnie wynagrodzenia w I kw. roku następującego w dwa lata po roku ukończenia szkoły,
+\item \verb{sr_wynagr_(|stawka)rY} - średnie wynagrodzenia w roku następującym w Y lat po roku ukończenia szkoły - oddzielne wskaźniki dla każdego roku, którego wszystkie miesiące znajdują się w danych,
+\item \verb{sr_wynagr_(uop|stawka)_nauka_r0_wrzgru} - średnie relatywne (odniesione do średnich miesięcznych wynagrodzeń w powiecie w danym roku) wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły w miesiącach kontynuowania nauki,
+\item \verb{sr_wynagr_(uop|stawka)_bez_nauki_r0_wrzgru} - średnie relatywne (odniesione do średnich miesięcznych wynagrodzeń w powiecie w danym roku) wynagrodzenia z umów o pracę od września do grudnia roku ukończenia szkoły w miesiącach niekontynuowania nauki,
 \item \code{praca_nauka_r0_wrzgru} - długość zatrudnienia w okresie kontynuowania nauki między wrześniem a grudniem roku ukończenia szkoły,
 \item \code{praca_bez_nauki_r0_wrzgru} - długość zatrudnienia w okresie bez kontynuowania nauki między wrześniem a grudniem roku ukończenia szkoły,
 \item \code{bezrobocie_r0_wrzgru} - długość bycia zarejestrowanym bezrobotnym od września do grudnia roku ukończenia szkoły.

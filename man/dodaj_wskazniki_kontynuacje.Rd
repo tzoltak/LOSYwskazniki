@@ -4,7 +4,13 @@
 \alias{dodaj_wskazniki_kontynuacje}
 \title{Obliczanie wskaznikow wykorzystywanych w raportach}
 \usage{
-dodaj_wskazniki_kontynuacje(p4, p2, miesOdUkoncz, tylkoLegalne = TRUE)
+dodaj_wskazniki_kontynuacje(
+  p4,
+  p2,
+  miesOdUkoncz,
+  tylkoLegalne = TRUE,
+  wyroznijTrybStudiow = FALSE
+)
 }
 \arguments{
 \item{p4}{ramka danych z tabelą \emph{pośrednią} P4 (lub jej odfiltrowanym
@@ -20,6 +26,11 @@ podzbiorem)}
 \item{tylkoLegalne}{wartość logiczna - czy usunąć z danych przekazanych \code{p2}
 kontynuacje, które nominalnie powinny być niemożliwe (ze względu na typ
 szkoły ukończonej przez absolwenta, por. \link{legalneKontynuacje})?}
+
+\item{wyroznijTrybStudiow}{wartość logiczna - czy w konstruowanych
+wskaźnikach wyróżniać studia stacjonarne i niestacjonarne? (oczywiście, o ile
+takie rozróżnienie jest dostępne w przekazanych danych, tj. od edycji
+monitoringu 2026)}
 }
 \value{
 Ramka danych przekazana argumentem \code{p4} z dodanymi kolumnami:

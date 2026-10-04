@@ -8,7 +8,8 @@ oblicz_wynagrodzenia_wzgledne(
   p3,
   miesOdUkoncz,
   nazwaWsk = "sr_wynagr_uop",
-  nauka2 = NA
+  nauka2 = NA,
+  zmWynagrodzenie = "wynagrodzenie_stawka"
 )
 }
 \arguments{
@@ -28,6 +29,9 @@ danego absolwenta mają być uwzględnione tylko miesiące, w których kontynuow
 on naukę (\code{nauka2 = 1}) albo tylko miesiące, w których nie kontynuował on
 nauki (\code{nauka2 = 0}); domyślna wartość (\code{NA}) wskazuje, że mają zostać
 uwzględnione wszystkie miesiące}
+
+\item{zmWynagrodzenie}{ciąg znaków - nazwa zmiennej opisującej wynagrodzenia,
+która ma być użyta przy obliczaniu wskaźników}
 }
 \value{
 Ramka danych o kolumnach takich jak w \code{p3} z dodaną kolumną o nazwie

@@ -16,6 +16,8 @@
 #' on naukę (`nauka2 = 1`) albo tylko miesiące, w których nie kontynuował on
 #' nauki (`nauka2 = 0`); domyślna wartość (`NA`) wskazuje, że mają zostać
 #' uwzględnione wszystkie miesiące
+#' @param zmWynagrodzenie ciąg znaków - nazwa zmiennej opisującej wynagrodzenia,
+#' która ma być użyta przy obliczaniu wskaźników
 #' @returns Ramka danych o kolumnach takich jak w `p3` z dodaną kolumną o nazwie
 #' podanej argumentem `nazwaWsk`. Liczba wierszy odpowiada liczbie unikalnych
 #' kombinacji wartości zmiennych (`id_abs`, `rok_abs`) w obiekcie przekazanym
@@ -37,15 +39,25 @@
 #' @export
 oblicz_wynagrodzenia_wzgledne <- function(p3, miesOdUkoncz,
                                           nazwaWsk = "sr_wynagr_uop",
-                                          nauka2 = NA) {
+                                          nauka2 = NA,
+                                          zmWynagrodzenie = "wynagrodzenie_stawka") {
   stopifnot(is.data.frame(p3),
-            all(c("mies_od_ukoncz", "nauka2", "wynagrodzenie_uop", "teryt_zam",
+            all(c("mies_od_ukoncz", "nauka2", "teryt_zam",
                   "powiat_sr_wynagrodzenie") %in% names(p3)),
             is.numeric(miesOdUkoncz), length(miesOdUkoncz) > 0L,
             !anyNA(miesOdUkoncz), all(as.integer(miesOdUkoncz) == miesOdUkoncz),
             is.character(nazwaWsk), length(nazwaWsk) == 1L,
             !anyNA(nazwaWsk),
-            is.numeric(nauka2), length(nauka2) == 1L, nauka2 %in% c(0L, 1L))
+            is.numeric(nauka2), length(nauka2) == 1L, nauka2 %in% c(0L, 1L),
+            is.character(zmWynagrodzenie), length(zmWynagrodzenie) == 1L,
+            !is.na(zmWynagrodzenie))
+  if (zmWynagrodzenie == "wynagrodzenie_stawka" &
+      !("wynagrodzenie_stawka" %in% names(p3))) {
+    zmWynagrodzenie <- "wynagrodzenie_uop"
+    warning("W ramce danych przekazanej argumentem `p3` nie ma zmiennej o nazwie `wynagrodzenie_stawka`. Wartość argumentu `zmWynagrodzenie` zmieniono na 'wynagrodzenie_uop'.",
+            immediate. = TRUE, call. = FALSE)
+  }
+  stopifnot(zmWynagrodzenie %in% names(p3))
   if (!is.na(nauka2)) {
     p3 <- p3[p3$nauka2 %in% nauka2, ]
   }
@@ -53,7 +65,7 @@ oblicz_wynagrodzenia_wzgledne <- function(p3, miesOdUkoncz,
     filter(.data$mies_od_ukoncz %in% miesOdUkoncz)
   p3 <- do.call(cbind,
                 setNames(list(p3[, c("id_abs", "rok_abs", "mies_od_ukoncz")],
-                              p3$wynagrodzenie_uop / p3$powiat_sr_wynagrodzenie),
+                              p3[[zmWynagrodzenie]] / p3$powiat_sr_wynagrodzenie),
                          c("", nazwaWsk)))
   return(oblicz_wskaznik_z_p3(p3, nazwaWsk, fun = mean, pomijaj0 = TRUE))
 }

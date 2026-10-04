@@ -12,6 +12,10 @@
 #' @param tylkoLegalne wartość logiczna - czy usunąć z danych przekazanych `p2`
 #' kontynuacje, które nominalnie powinny być niemożliwe (ze względu na typ
 #' szkoły ukończonej przez absolwenta, por. [legalneKontynuacje])?
+#' @param wyroznijTrybStudiow wartość logiczna - czy w konstruowanych
+#' wskaźnikach wyróżniać studia stacjonarne i niestacjonarne? (oczywiście, o ile
+#' takie rozróżnienie jest dostępne w przekazanych danych, tj. od edycji
+#' monitoringu 2026)
 #' @returns Ramka danych przekazana argumentem `p4` z dodanymi kolumnami:
 #'
 #' -    `typ_szk_kont<mies_od_ukoncz>` - formy kontynuacji nauki,
@@ -39,7 +43,8 @@
 #' @importFrom tidyr pivot_wider
 #' @export
 dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
-                                        tylkoLegalne = TRUE) {
+                                        tylkoLegalne = TRUE,
+                                        wyroznijTrybStudiow = FALSE) {
   stopifnot(is.data.frame(p2),
             all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p2)),
             !anyNA(p2$id_abs), !anyNA(p2$rok_abs), !anyNA(p2$mies_od_ukoncz),
@@ -52,7 +57,9 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
             mode(p2$rok_abs) == mode(p4$rok_abs),
             !anyNA(p4$id_abs), !anyNA(p4$rok_abs),
             is.logical(tylkoLegalne), length(tylkoLegalne) == 1L,
-            !is.na(tylkoLegalne))
+            !is.na(tylkoLegalne),
+            is.logical(wyroznijTrybStudiow), length(wyroznijTrybStudiow) == 1L,
+            !is.na(wyroznijTrybStudiow))
   p2 <- p2 %>%
     semi_join(p4,
               by = c("id_abs", "rok_abs"))
@@ -82,8 +89,19 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
   }
 
   p2$typ_szk_kont[p2$typ_szk_kont == "studia"] <- "Studia" # dla zgodności ze starszymi wersjami tabel pośrednich
-  typySzkol <- c("Studia", "Szkoła policealna", "Liceum dla dorosłych",
-                 "Branżowa szkoła II stopnia", "KKZ", "KUZ")
+  if (!wyroznijTrybStudiow) {
+    p2$typ_szk_kont[p2$typ_szk_kont %in% c("Studia stacjonarne",
+                                           "Studia niestacjonarne")] <- "Studia"
+  }
+  if (any(p2$typ_szk_kont %in% c("Studia stacjonarne",
+                                 "Studia niestacjonarne"))) {
+    typySzkol <- c("Studia stacjonarne", "Studia niestacjonarne",
+                   "Szkoła policealna", "Liceum dla dorosłych",
+                   "Branżowa szkoła II stopnia", "KKZ", "KUZ")
+  } else {
+    typySzkol <- c("Studia", "Szkoła policealna", "Liceum dla dorosłych",
+                   "Branżowa szkoła II stopnia", "KKZ", "KUZ")
+  }
   p2 <- p2 %>%
     filter(.data$mies_od_ukoncz %in% miesOdUkoncz) %>%
     left_join(p4 %>%
@@ -101,6 +119,15 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
                                          as.character(.data$forma_kont),
                                          as.character(.data$typ_szk_kont)),
                                  typySzkol))
+  if (is.factor(p2$typ_szk)) {
+    # Obsługa zaszłości historycznych dotyczących sposobu nazywania LO dla dorosłych
+    legalneKontynuacje <- LOSYwskazniki::legalneKontynuacje %>%
+      mutate(typ_szk = factor(.data$typ_szk, levels(p2$typ_szk))) %>%
+      filter(!is.na(.data$typ_szk))
+  } else {
+    legalneKontynuacje <- LOSYwskazniki::legalneKontynuacje %>%
+      filter(.data$typ_szk %in% unique(p2$typ_szk))
+  }
   if (tylkoLegalne) {
     p2 <- p2 %>%
       semi_join(LOSYwskazniki::legalneKontynuacje,
@@ -127,11 +154,13 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
     select("id_abs", "rok_abs", "mies_od_ukoncz", "typ_szk", "typ_szk_kont") %>%
     oblicz_wskaznik_macierz(zm = "typ_szk_kont", zestawWartosci = typySzkol,
                             wszystkieObs = wszystkieObs)
+  # Pola opisujące nielegalne kontynuacje mogą mieć albo wartość 1 (tylko jeśli `tylkoLegalne=FALSE`)
+  # albo być brakami danych
   for (typ in unique(LOSYwskazniki::legalneKontynuacje$typ_szk)) {
     nielegalneTypy <-
       setdiff(colnames(szkoly$typ_szk_kont),
-              LOSYwskazniki::legalneKontynuacje$typ_szk_kont[
-                LOSYwskazniki::legalneKontynuacje$typ_szk == typ])
+              legalneKontynuacje$typ_szk_kont[
+                legalneKontynuacje$typ_szk == typ])
     szkoly$typ_szk_kont[szkoly$typ_szk == typ, nielegalneTypy] <-
       ifelse(szkoly$typ_szk_kont[szkoly$typ_szk == typ, nielegalneTypy] == 1L,
              szkoly$typ_szk_kont[szkoly$typ_szk == typ, nielegalneTypy],
@@ -153,43 +182,46 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
     pivot_wider(names_from = "mies_od_ukoncz", names_prefix = "branza_kont_bsii",
                 values_from = "branza_kont_bsii")
 
+  typySzkolStudia <- levels(legalneKontynuacje$typ_szk)[
+    legalneKontynuacje$typ_szk[legalneKontynuacje$typ_szk_kont %in% "Studia"]]
   dziedziny <- p2 %>%
-    filter(.data$typ_szk %in% c("Liceum ogólnokształcące",
-                                "Liceum dla dorosłych",
-                                "Technikum", "Branżowa szkoła II stopnia",
-                                "Szkoła policealna"),
-           .data$typ_szk_kont %in% "Studia",
+    filter(.data$typ_szk %in% typySzkolStudia,
+           .data$typ_szk_kont %in% c("Studia", "Studia stacjonarne",
+                                     "Studia niestacjonarne"),
            !is.na(.data$dziedzina_kont)) %>%
-    select("id_abs", "rok_abs", "typ_szk", "mies_od_ukoncz", "dziedzina_kont") %>%
-    oblicz_wskaznik_macierz(zm = "dziedzina_kont",
-                            wszystkieObs = wszystkieObs %>%
-                              filter(.data$typ_szk %in% c("Liceum ogólnokształcące",
-                                                          "Liceum dla dorosłych",
-                                                          "Technikum",
-                                                          "Branżowa szkoła II stopnia",
-                                                          "Szkoła policealna")))
-  colnames(dziedziny$dziedzina_kont) <- sub("^Dziedzina ", "",
-                                            colnames(dziedziny$dziedzina_kont))
+    select("id_abs", "rok_abs", "typ_szk", "mies_od_ukoncz", "dziedzina_kont")
+  if (nrow(dziedziny) > 0) {
+    dziedziny <- dziedziny %>%
+      oblicz_wskaznik_macierz(zm = "dziedzina_kont",
+                              wszystkieObs = wszystkieObs %>%
+                                filter(.data$typ_szk %in% typySzkolStudia))
+    colnames(dziedziny$dziedzina_kont) <- sub("^Dziedzina ", "",
+                                              colnames(dziedziny$dziedzina_kont))
+  } else {
+    warning("Nie udało się utworzyć wskaźników opisujących dziedziny kontynuacji - brak pasujących rekordów w ramce danych przekazanej argumentem `p2`.",
+            immediate. = TRUE, call. = FALSE)
+  }
   dziedziny <- dziedziny %>%
     pivot_wider(names_from = "mies_od_ukoncz", names_prefix = "dziedzina_kont",
                 values_from = "dziedzina_kont")
 
   dyscypliny <- p2 %>%
-    filter(.data$typ_szk %in% c("Liceum ogólnokształcące",
-                                "Liceum dla dorosłych",
-                                "Technikum", "Branżowa szkoła II stopnia",
-                                "Szkoła policealna"),
-           .data$typ_szk_kont %in% "Studia",
+    filter(.data$typ_szk %in% typySzkolStudia,
+           .data$typ_szk_kont %in% c("Studia", "Studia stacjonarne",
+                                     "Studia niestacjonarne"),
            !is.na(.data$dyscyplina_wiodaca_kont)) %>%
     select("id_abs", "rok_abs", "typ_szk", "mies_od_ukoncz",
-           dyscyplina_kont = "dyscyplina_wiodaca_kont") %>%
-    oblicz_wskaznik_macierz(zm = "dyscyplina_kont",
-                            wszystkieObs = wszystkieObs %>%
-                              filter(.data$typ_szk %in% c("Liceum ogólnokształcące",
-                                                          "Liceum dla dorosłych",
-                                                          "Technikum",
-                                                          "Branżowa szkoła II stopnia",
-                                                          "Szkoła policealna"))) %>%
+           dyscyplina_kont = "dyscyplina_wiodaca_kont")
+  if (nrow(dyscypliny) > 0) {
+    dyscypliny <- dyscypliny %>%
+      oblicz_wskaznik_macierz(zm = "dyscyplina_kont",
+                              wszystkieObs = wszystkieObs %>%
+                                filter(.data$typ_szk %in% typySzkolStudia))
+  } else {
+    warning("Nie udało się utworzyć wskaźników opisujących dyscypliny kontynuacji - brak pasujących rekordów w ramce danych przekazanej argumentem `p2`.",
+            immediate. = TRUE, call. = FALSE)
+  }
+  dyscypliny <- dyscypliny %>%
     pivot_wider(names_from = "mies_od_ukoncz", names_prefix = "dyscyplina_kont",
                 values_from = "dyscyplina_kont")
 

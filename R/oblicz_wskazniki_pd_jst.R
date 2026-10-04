@@ -2,7 +2,7 @@
 #' @description
 #' Funkcja pozwala obliczyć zestawienia zagregowanych wskaźników z danej edycji
 #' monitoringu dla każdej JST na podanym poziomie podziału terytorialnego
-#' Polski.
+#' Polski (w przecięciu z kohortą absolwentów, opisną zmienną `rok_abs`).
 #' @inheritParams oblicz_wskazniki_pd_grupy
 #' @param poziom opcjonalnie ciąg znaków - poziom podziału terytorialnego, na
 #' jakim mają zostać obliczone wskaźniki: "Polska", "wojewodztwa" lub "powiaty";
@@ -85,8 +85,7 @@ oblicz_wskazniki_pd_jst <- function(p4, p3,
                                     etykietaOgolem = "Ogółem",
                                     wyswietlPostep = 1,
                                     liczbaWatkowJST = 1L, liczbaWatkowGrupy = 1L) {
-  stopifnot(is.data.frame(p3),
-            all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p3)),
+  stopifnot(is.data.frame(p3) | is.null(p3),
             is.data.frame(p4),
             all(c("id_abs", "rok_abs", "id_szk") %in% names(p4)),
             is.numeric(wyswietlPostep), length(wyswietlPostep) == 1,
@@ -94,11 +93,27 @@ oblicz_wskazniki_pd_jst <- function(p4, p3,
             is.numeric(liczbaWatkowJST), length(liczbaWatkowJST) == 1L,
             !is.na(liczbaWatkowJST), is.finite(liczbaWatkowJST),
             liczbaWatkowJST == as.integer(liczbaWatkowJST), liczbaWatkowJST > 0L)
+  if (!is.null(p3)) {
+    stopifnot(all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p3)))
+  } else {
+    stopifnot(is.null(zmWskaznikiP3) | length(zmWskaznikiP3) == 0L) # w zasadzie wystarczyłby warunek na długość, ale tak jest bardziej czytelne
+    p3 <- data.frame(id_abs = vector(mode = "integer", length = 0L),
+                     rok_abs = vector(mode = "integer", length = 0L),
+                     mies_od_ukoncz = vector(mode = "integer", length = 0L))
+  }
   poziom <- match.arg(poziom)
-  if (nrow(anti_join(p4, p3,
-                     by = c("id_abs", "rok_abs"))) > 0) {
-    warning("Niektóre kombinacje wartości (`id_abs`, `rok_abs`) występujące w ramce danych przekazanej argumentem `p4` nie występują w ramce danych przekazanej argumentem `p3`.",
-            call. = FALSE, immediate. = TRUE)
+  if (length(zmWskaznikiP3) > 0L) {
+    if (nrow(anti_join(p4, p3,
+                       by = c("id_abs", "rok_abs"))) > 0L) {
+      warning("Niektóre kombinacje wartości (`id_abs`, `rok_abs`) występujące w ramce danych przekazanej argumentem `p4` nie występują w ramce danych przekazanej argumentem `p3`.",
+              call. = FALSE, immediate. = TRUE)
+    }
+  }
+  if (liczbaWatkowJST > 1L) {
+    p4 <- p4 %>%
+      select("id_abs", "rok_abs", "id_szk", all_of(c(zmGrupujace, zmWskaznikiP4)))
+    p3 <- p3 %>%
+      select("id_abs", "rok_abs", "mies_od_ukoncz", all_of(zmWskaznikiP3))
   }
 
   if (poziom == "wojewodztwa") {
@@ -118,7 +133,9 @@ oblicz_wskazniki_pd_jst <- function(p4, p3,
       mutate(obszar = "Polska")
   }
   if (any(zmGrupujace %in% names(matryca))) {
-    warning("Wśród nazw podanych argumentem `zmGrupujace` znajdują się nazwy zmiennych definiujących zadany podział terytorialny (zdefiniowany argumentem `poziom`). Zostaną one pominięte.",
+    warning("Wśród nazw podanych argumentem `zmGrupujace` znajduj(e/ą) się nazw(a/y) zmienn(ej/ych) definiując(ej/ych) zadany podział terytorialny definiowany argumentem `poziom`): '",
+            paste(intersect(zmGrupujace, names(matryca)), collapse = "', '"),
+            "'. Zostan(ie/ą) on(a/e) pominięt(a/e).",
             immediate. = TRUE, call. = FALSE)
     zmGrupujace <- setdiff(zmGrupujace, names(matryca))
   }

@@ -24,8 +24,8 @@
 #' element definiuje oddzielony zestaw zmiennych) - przy sprawdzaniu, czy dana
 #' kombinacja wartości występuje w danych używane będą zarówno zmienne, których
 #' nazwy zawiera dany element listy, (np. domyślnie `kod_zaw` i `nazwa_zaw`) jak
-#'  zmienna, której nazwę podano nazwą tego elementu listy (np.domyślnie
-#'  `typ_szk`), przy czym:
+#' zmienna, której nazwę podano nazwą tego elementu listy (np.domyślnie
+#' `typ_szk`), przy czym:
 #'
 #' -    zmienne podane wartościami elementu listy będą miały tworzoną wspólnie
 #'      *wartość ogółem* (tj. wśród tworzonych grup albo wszystkie te zmienne
@@ -106,9 +106,7 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
                                       wyswietlPostep = TRUE,
                                       liczbaWatkow = 1L,
                                       zwrocTylkoMatryce = FALSE) {
-  stopifnot(is.data.frame(p3),
-            all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p3)),
-            !anyNA(p3$id_abs), !anyNA(p3$rok_abs), !anyNA(p3$mies_od_ukoncz),
+  stopifnot(is.data.frame(p3) | is.null(p3),
             is.data.frame(p4),
             all(c("id_abs", "rok_abs", "id_szk") %in% names(p4)),
             !anyNA(p4$id_abs), !anyNA(p4$rok_abs), !anyNA(p4$id_szk),
@@ -126,12 +124,25 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
             liczbaWatkow == as.integer(liczbaWatkow), liczbaWatkow > 0L,
             is.logical(zwrocTylkoMatryce), length(zwrocTylkoMatryce) == 1L,
             zwrocTylkoMatryce %in% c(FALSE, TRUE))
+  if (!is.null(p3)) {
+    stopifnot(all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p3)),
+              !anyNA(p3$id_abs), !anyNA(p3$rok_abs), !anyNA(p3$mies_od_ukoncz))
+  } else {
+    stopifnot(is.null(zmWskaznikiP3) | length(zmWskaznikiP3) == 0L) # w zasadzie wystarczyłby warunek na długość, ale tak jest bardziej czytelne
+    p3 <- data.frame(id_abs = vector(mode = "integer", length = 0L),
+                     rok_abs = vector(mode = "integer", length = 0L),
+                     mies_od_ukoncz = vector(mode = "integer", length = 0L))
+  }
   if (liczbaWatkow > 3L) warning("Testy empiryczne wskazują, że wywołanie z argumentem `liczbaWatkow` większym niż typowo 3 nie prowadzą do dalszego zmniejszania szybkości obliczeń.")
   if (is.null(zmGrupujace)) zmGrupujace <- vector(mode = "character", length = 0L)
   if (is.null(zmBezOgolem)) zmBezOgolem <- vector(mode = "character", length = 0L)
   stopifnot(!anyNA(zmGrupujace), !any((duplicated(zmGrupujace))),
             all(zmGrupujace %in% names(p4)),
             !anyNA(zmBezOgolem), !any((duplicated(zmBezOgolem))))
+  if ("id_abs" %in% zmGrupujace) {
+    warning("Wśród nazw zmiennych podanych argumentem `zmGrupujace` występuje 'id_abs', a to nie zdarza się w typowych schematach użycia. Obliczenia będą zapewne trwać bardzo długo!",
+            immediate. = TRUE)
+  }
   if (is.null(zmTylkoWartosciWDanych)) {
     zmTylkoWartosciWDanych <- list(vector(mode = "character", length = 0L))
   }
@@ -149,17 +160,27 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
   if (is.null(names(zmTylkoWartosciWDanych))) {
     names(zmTylkoWartosciWDanych) <- rep("", length(zmTylkoWartosciWDanych))
   }
+  p4 <- p4 %>%
+    select("id_abs", "rok_abs", "id_szk", all_of(c(zmGrupujace, zmWskaznikiP4)))
+  p3 <- p3 %>%
+    select("id_abs", "rok_abs", "mies_od_ukoncz", all_of(zmWskaznikiP3))
   miesiace <- unique(p3$mies_od_ukoncz)
 
   p4 <- p4 %>%
     mutate(across(all_of(zmGrupujace) &
-                    (!(all_of(zmBezOgolem)) | where(is.character) |
+                    (!(any_of(zmBezOgolem)) | where(is.character) |
                        where(is.factor)),
                   ~podmien_braki_danych(., etykietaBrakDanych,
                                         zawszeDodajPoziom = FALSE))) %>%
-    mutate(across(c(all_of(zmGrupujace), -all_of(zmBezOgolem)),
+    mutate(across(c(all_of(zmGrupujace), -any_of(zmBezOgolem)),
                   ~dodaj_wartosc_ogolem(., wartosc = etykietaOgolem,
                                         zawszeDodawaj = FALSE)))
+  if ("rok_abs" %in% zmGrupujace & is.factor(p4$rok_abs)) {
+    p3$rok_abs <- factor(p3$rok_abs, levels(p4$rok_abs))
+  }
+  if ("id_abs" %in% zmGrupujace & is.factor(p4$id_abs)) {
+    p3$id_abs <- factor(p3$id_abs, levels(p4$id_abs))
+  }
   if (length(zmGrupujace) > 0L) {
     matryca <- do.call(expand_grid,
                        p4 %>%
