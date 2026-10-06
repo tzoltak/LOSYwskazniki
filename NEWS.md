@@ -1,3 +1,14 @@
+# LOSYwskazniki 0.9.0 (??.??.????)
+
+## Do zrobienia
+
+-  Dodać funkcję *spłaszczającą* obliczone wskazniki *pd*.
+
+## Udoskonalenia
+
+-  `dodaj_wskazniki_dyplomy()`, `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_prace()` mają mniejszy ślad pamięciowy;
+-  Uzupełniono asercje `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_prace()` w zakresie kompletności zestawu zmiennych w ramce danych przekazywanej argumentem odpowiednio `p2` albo `p3`.
+
 # LOSYwskazniki 0.8.0 (04.10.2026)
 
 ## Aktualizacje

@@ -71,6 +71,9 @@ dodaj_wskazniki_dyplomy <- function(p4, p1, maksMiesOdUkoncz,
               as.integer(rokMonitoringu) == rokMonitoringu,
               rokMonitoringu >= 2019)
   }
+  p1 <- p1 %>%
+    select("id_abs", "rok_abs", "mies_od_ukoncz", "rok",
+           "rodzaj_dyplomu", "kod_zaw", "kod_zaw_dyplom")
   if (maksMiesOdUkoncz < 0) {
     stopifnot("Jeśli argument `maksMiesOdUkoncz` został podany jako liczba ujemna, konieczne jest podanie również wartości argumentu `rokMonitoringu`." =
                 !is.null(rokMonitoringu))

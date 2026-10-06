@@ -64,7 +64,7 @@ dodaj_wskazniki_prace <- function(p4, p3,
             immediate. = TRUE, call. = FALSE)
   }
   stopifnot(is.data.frame(p3),
-            all(c("id_abs", "rok_abs", "mies_od_ukoncz",
+            all(c("id_abs", "rok_abs", "mies_od_ukoncz", "teryt_zam",
                   "powiat_sr_wynagrodzenie", "praca", "nauka2",
                   "bezrobocie") %in% names(p3)),
             all(zmWynagrodzenie %in% names(p3)),
@@ -85,6 +85,9 @@ dodaj_wskazniki_prace <- function(p4, p3,
     wszystkieObs <- p4
   }
   p3 <- p3 %>%
+    select("id_abs", "rok_abs", "mies_od_ukoncz", "teryt_zam",
+           "powiat_sr_wynagrodzenie", "praca", "nauka2",
+           "bezrobocie", all_of(zmWynagrodzenie)) %>%
     semi_join(wszystkieObs, by = c("id_abs", "rok_abs"))
 
   wynagrodzenia <- list(

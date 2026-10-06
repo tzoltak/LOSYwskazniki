@@ -46,7 +46,9 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
                                         tylkoLegalne = TRUE,
                                         wyroznijTrybStudiow = FALSE) {
   stopifnot(is.data.frame(p2),
-            all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p2)),
+            all(c("id_abs", "rok_abs", "mies_od_ukoncz", "id_szk_kont",
+                  "typ_szk_kont", "kod_zaw_kont", "branza_kont", "forma_kont",
+                  "dziedzina_kont", "dyscyplina_wiodaca_kont") %in% names(p2)),
             !anyNA(p2$id_abs), !anyNA(p2$rok_abs), !anyNA(p2$mies_od_ukoncz),
             is.numeric(miesOdUkoncz), length(miesOdUkoncz) > 0L,
             !anyNA(miesOdUkoncz), !any(duplicated(miesOdUkoncz)),
@@ -61,6 +63,9 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
             is.logical(wyroznijTrybStudiow), length(wyroznijTrybStudiow) == 1L,
             !is.na(wyroznijTrybStudiow))
   p2 <- p2 %>%
+    select("id_abs", "rok_abs", "mies_od_ukoncz", "id_szk_kont",
+           "typ_szk_kont", "kod_zaw_kont", "branza_kont", "forma_kont",
+           "dziedzina_kont", "dyscyplina_wiodaca_kont") %>%
     semi_join(p4,
               by = c("id_abs", "rok_abs"))
   brakujaceMiesiace <- split(p2$mies_od_ukoncz, p2$rok_abs) %>%
