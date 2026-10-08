@@ -1,13 +1,23 @@
-# LOSYwskazniki 0.9.0 (??.??.????)
+# LOSYwskazniki 0.9.0 (08.10.2026)
 
-## Do zrobienia
+## Nowe funkcje
 
--  Dodać funkcję *spłaszczającą* obliczone wskazniki *pd*.
+-  `dodaj_procenty_wskazniki_pd()` - pozwala dodać do już policzonych wskaźników będących rozkładami liczebności również rozkład częstości;
+-  `splaszcz_wskazniki_pd()` - pozwala *spłaszczyć* strukturę zestawienia wartości zagregowanych wskaźników tak, aby nie zawierała już ona kolumn-list-wektorów; uwaga, zwracana ramka danych może mieć bardzo dużo kolumn;
+-  `usun_puste_wskazniki_pd()` - pozwala usunąć z zestawienia wartości zagregowanych wskaźników (w formacie *długim*) wiersze opisujące takie kombinacje cech absolwentów, które nie wysępowały w danych (lub zostały zanonimizowane).
 
 ## Udoskonalenia
 
 -  `dodaj_wskazniki_dyplomy()`, `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_prace()` mają mniejszy ślad pamięciowy;
--  Uzupełniono asercje `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_prace()` w zakresie kompletności zestawu zmiennych w ramce danych przekazywanej argumentem odpowiednio `p2` albo `p3`.
+-  Uzupełniono asercje `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_prace()` w zakresie kompletności zestawu zmiennych w ramce danych przekazywanej argumentem odpowiednio `p2` albo `p3`;
+-  `zanonimizuj_wskazniki_pd()` obsługuuje również wskaźniki z dodanym (przy pomocy `dodaj_proenty_wskazniki_pd()` rozkładami liczebności.
+
+## Naprawione błędy
+
+-  `oblicz_wskazniki_pd_grupy()` sprawdza, czy lista przekazana argumentem `zmTylkoWartosciWDanych` ma nazwy i usuwa z niej elementy, których nazwy nie występują wśród nazw kolumn ramki danych przekazanej argumentem `p4`;
+-  `oblicz_wskazniki_pd()`, a w konsekwencji także `oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_jst()`:
+    -  Obsługuje poprawnie również ujemne wartości `mies_od_ukoncz` (oddzielając nazwę wskaźnika od opisu okresu);
+    -  Nie gubi atrybutu `lZadenZWymienionych` w przypadku wskaźników podanych argumentem `wskTylkoNiezerowe`.
 
 # LOSYwskazniki 0.8.0 (04.10.2026)
 

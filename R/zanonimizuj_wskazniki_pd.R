@@ -33,7 +33,7 @@
 #' Funkcja anonimizuje **wszystko, co *wyglądają jej na zagregowany wskaźnik
 #' przeznaczony do publicznej prezentacji***, co w praktyce oznacza, że
 #' sprawdzane są elementy kolumn-list w ramce danych przekazanej argumentem `x`.
-#' Jeśli element takiej kolumny listy ma choć jeden z atrybutów nazywających się
+#' Jeśli element takiej kolumny-listy ma choć jeden z atrybutów nazywających się
 #' `lAbs` lub `lSzk`, ich wartości zostaną przyrównane do progów podanych
 #' argumentami odpowiednio `probAbs` i `progSzk` w wywołaniu funkcji. Jeśli
 #' wartość choć jednego z tych atrybutów jest mniejsza od odpowiedniej wartości
@@ -63,7 +63,7 @@ zanonimizuj_wskazniki_pd <- function(x, progAbs = 10, progSzk = 3,
   if ("wskaznik" %in% names(x)) {
     nieWDanych <- setdiff(wskUsuwajZestawWartosci, unique(x$wskaznik))
     if (length(nieWDanych) > 0L) {
-      warning("W przekazanych danych nie występują następujące wskaźniki, których nazwy podano argumentem `wskUsuwajZestawWartosci`: '",
+      message("W przekazanych danych nie występują następujące wskaźniki, których nazwy podano argumentem `wskUsuwajZestawWartosci`: '",
               paste(nieWDanych, collapse = "', '"), "'.")
     }
     x <-
@@ -77,7 +77,7 @@ zanonimizuj_wskazniki_pd <- function(x, progAbs = 10, progSzk = 3,
   } else {
     nieWDanych <- setdiff(wskUsuwajZestawWartosci, names(x))
     if (length(nieWDanych) > 0L) {
-      warning("W przekazanych danych nie występują następujące kolumny, których nazwy podano argumentem `wskUsuwajZestawWartosci`: '",
+      message("W przekazanych danych nie występują następujące kolumny, których nazwy podano argumentem `wskUsuwajZestawWartosci`: '",
               paste(nieWDanych, collapse = "', '"), "'.")
     }
     x <-
@@ -109,7 +109,13 @@ anonimizuj_pojedynczy_wskaznik_pd <- function(x, usuwajZestawWartosci,
     if ((a$lAbs < progAbs & a$lAbs > 0) | is.na(a$lAbs) |
         (a$lSzk < progSzk & a$lSzk > 0) | is.na(a$lSzk)) {
       if (usuwajZestawWartosci) {
-        x <- NA
+        if (hasName(dimnames(x), "rozklad")) {
+          # obsługa wskaźników z dodanymi rozkładami czestości
+          x <- apply(x, which(names(dimnames(x)) == "rozklad"),
+                     \(x) {return(NA)})
+        } else {
+          x <- NA
+        }
         attributes(a) <- a[names(a) %in% c("lAbs", "lSzk",
                                            "lZadenZWymienionych",
                                            "lNieDotyczy")]

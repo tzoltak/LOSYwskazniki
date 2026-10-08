@@ -61,7 +61,7 @@ skomplikowana).
 Funkcja anonimizuje \strong{wszystko, co \emph{wyglądają jej na zagregowany wskaźnik
 przeznaczony do publicznej prezentacji}}, co w praktyce oznacza, że
 sprawdzane są elementy kolumn-list w ramce danych przekazanej argumentem \code{x}.
-Jeśli element takiej kolumny listy ma choć jeden z atrybutów nazywających się
+Jeśli element takiej kolumny-listy ma choć jeden z atrybutów nazywających się
 \code{lAbs} lub \code{lSzk}, ich wartości zostaną przyrównane do progów podanych
 argumentami odpowiednio \code{probAbs} i \code{progSzk} w wywołaniu funkcji. Jeśli
 wartość choć jednego z tych atrybutów jest mniejsza od odpowiedniej wartości

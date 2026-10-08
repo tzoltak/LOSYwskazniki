@@ -113,8 +113,11 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
             !any(c("___tylkoWDanychNazwaOgolem___", "___tylkoWDanychOgolem___",
                    "___wDanych___", "___wskazniki___") %in% names(p4)),
             is.character(zmGrupujace) | is.null(zmGrupujace),
+            all(zmGrupujace %in% names(p4)),
             is.character(zmBezOgolem) | is.null(zmBezOgolem),
             is.list(zmTylkoWartosciWDanych) | is.null(zmTylkoWartosciWDanych),
+            is.character(zmWskaznikiP4) | is.null(zmWskaznikiP4),
+            all(zmWskaznikiP4 %in% names(p4)),
             is.character(etykietaBrakDanych), length(etykietaBrakDanych) == 1L,
             !is.na(etykietaBrakDanych),
             is.logical(wyswietlPostep), length(wyswietlPostep) == 1L,
@@ -126,7 +129,9 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
             zwrocTylkoMatryce %in% c(FALSE, TRUE))
   if (!is.null(p3)) {
     stopifnot(all(c("id_abs", "rok_abs", "mies_od_ukoncz") %in% names(p3)),
-              !anyNA(p3$id_abs), !anyNA(p3$rok_abs), !anyNA(p3$mies_od_ukoncz))
+              !anyNA(p3$id_abs), !anyNA(p3$rok_abs), !anyNA(p3$mies_od_ukoncz),
+              is.character(zmWskaznikiP3) | is.null(zmWskaznikiP3),
+              all(zmWskaznikiP3 %in% names(p3)))
   } else {
     stopifnot(is.null(zmWskaznikiP3) | length(zmWskaznikiP3) == 0L) # w zasadzie wystarczyłby warunek na długość, ale tak jest bardziej czytelne
     p3 <- data.frame(id_abs = vector(mode = "integer", length = 0L),
@@ -146,6 +151,11 @@ oblicz_wskazniki_pd_grupy <- function(p4, p3, zmGrupujace,
   if (is.null(zmTylkoWartosciWDanych)) {
     zmTylkoWartosciWDanych <- list(vector(mode = "character", length = 0L))
   }
+  if (length( zmTylkoWartosciWDanych) > 0L) {
+    stopifnot(!is.null(names(zmTylkoWartosciWDanych)))
+  }
+  zmTylkoWartosciWDanych <-
+    zmTylkoWartosciWDanych[names(zmTylkoWartosciWDanych) %in% names(p4)]
   for (i in seq_along(zmTylkoWartosciWDanych)) {
     stopifnot(is.character(zmTylkoWartosciWDanych[[i]]),
               !anyNA(zmTylkoWartosciWDanych[[i]]),

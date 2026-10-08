@@ -265,7 +265,7 @@ oblicz_wskazniki_pd <- function(p4, p3,
                        args = append(list(.Data = x[x > 0 & !is.na(x)]),
                                      attributes(x)[names(attributes(x)) %in%
                                                      c("lAbs", "lSzk",
-                                                       "lZadaenZWymienionych",
+                                                       "lZadenZWymienionych",
                                                        "lNieDotyczy")]))
         }
         return(x)
@@ -276,12 +276,12 @@ oblicz_wskazniki_pd <- function(p4, p3,
       mutate(czyMiesiac = !grepl("_(r[[:digit:]]+)(|_[[:alpha:]]+)$",
                                  .data$wskaznik),
              czas = ifelse(.data$czyMiesiac,
-                           sub("^.*[^[:digit:]]([[:digit:]]+)$", "\\1",
+                           sub("^.*[^[:digit:]-](-?[[:digit:]]+)$", "\\1",
                                .data$wskaznik),
                            sub("^.*_(r[[:digit:]]+)(|_[[:alpha:]]+)$", "\\1\\2",
                                .data$wskaznik)),
              wskaznik = ifelse(.data$czyMiesiac,
-                               sub("^(.*[^[:digit:]])[[:digit:]]+$", "\\1",
+                               sub("^(.*[^[:digit:]-])-?[[:digit:]]+$", "\\1",
                                    .data$wskaznik),
                                sub("^(.*)_r[[:digit:]]+(|_[[:alpha:]]+)$", "\\1",
                                    .data$wskaznik))) %>%

@@ -110,6 +110,12 @@ oblicz_wskazniki_pd_jst <- function(p4, p3,
     }
   }
   if (liczbaWatkowJST > 1L) {
+    stopifnot(is.character(zmGrupujace) | is.null(zmGrupujace),
+              all(zmGrupujace %in% names(p4)),
+              is.character(zmWskaznikiP4) | is.null(zmWskaznikiP4),
+              all(zmWskaznikiP4 %in% names(p4)),
+              is.character(zmWskaznikiP3) | is.null(zmWskaznikiP3),
+              all(zmWskaznikiP3 %in% names(p3)))
     p4 <- p4 %>%
       select("id_abs", "rok_abs", "id_szk", all_of(c(zmGrupujace, zmWskaznikiP4)))
     p3 <- p3 %>%
