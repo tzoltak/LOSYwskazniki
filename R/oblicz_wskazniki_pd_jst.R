@@ -117,7 +117,9 @@ oblicz_wskazniki_pd_jst <- function(p4, p3,
               is.character(zmWskaznikiP3) | is.null(zmWskaznikiP3),
               all(zmWskaznikiP3 %in% names(p3)))
     p4 <- p4 %>%
-      select("id_abs", "rok_abs", "id_szk", all_of(c(zmGrupujace, zmWskaznikiP4)))
+      select("id_abs", "rok_abs", "id_szk", all_of(c(zmGrupujace, zmWskaznikiP4)),
+             any_of(c("teryt_woj_szk", "nazwa_woj_szk",
+                      "teryt_pow_szk", "nazwa_pow_szk")))
     p3 <- p3 %>%
       select("id_abs", "rok_abs", "mies_od_ukoncz", all_of(zmWskaznikiP3))
   }
@@ -128,7 +130,7 @@ oblicz_wskazniki_pd_jst <- function(p4, p3,
       select("rok_abs", "teryt_woj_szk", "nazwa_woj_szk") %>%
       distinct()
   } else if (poziom == "powiaty") {
-    stopifnot(all(c("teryt_woj_szk", "nazwa_woj_szk") %in% names(p4)))
+    stopifnot(all(c("teryt_pow_szk", "nazwa_pow_szk") %in% names(p4)))
     matryca <- p4 %>%
       select("rok_abs", "teryt_pow_szk", "nazwa_pow_szk") %>%
       distinct()

@@ -82,8 +82,11 @@ splaszcz_wskazniki_pd <- function(x, dopiszAtrybuty = c("nie", "lAbs", "lSzk",
                         return(as.data.frame(as.list(w),
                                              check.names = FALSE))
                       } else {
-                        print(str(w))
-                        warning("Nie wiadomo jak dokonać spłaszczenia.")
+                        if (!is.null(w)) {
+                          print(str(w))
+                          warning("Nie wiadomo jak dokonać spłaszczenia.",
+                                  immediate. = TRUE, call. = FALSE)
+                        }
                         return(data.frame(x = NA)[, c(), drop = FALSE]) # ramka danych z zerową liczbą kolumn oraz 1 wierszem
                       }
                     },

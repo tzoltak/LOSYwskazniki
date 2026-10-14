@@ -1,3 +1,14 @@
+# LOSYwskazniki 0.9.1 (14.10.2026)
+
+## Udoskonalenia
+
+-  `splaszcz_wskazniki_pd()` nie rzuca ostrzeżeniami natrafifszy na wartości `NULL` w kolumnach opisujących wartości wskaźników (w szczególności powstające w wyniku tego, że przekazane dane zawierają kilka wskaźników, z których jeden jest obliczony dla nieco innego zestawu kombinacji wartości zmiennych grupujących, niż inne).
+
+## Naprawione błędy
+
+-  Usunięto regresję w `oblicz_wskazniki_pd_jst()` wprowadzoną w wersji 0.8.0, a  polegającą na tym, że przycinając zakres zmiennych przekazanych argumentem `p4` usuwała również te opisujące, w jakiej JST znajduje się szkoła;
+-  `splaszcz_wskazniki_pd()` rzuca ostrzeżenie, że nie wie, jak spłaszczyć dany element kolumny-listy bezpośrednio po wydrukowaniu tego obiektu na konsoli.
+
 # LOSYwskazniki 0.9.0 (08.10.2026)
 
 ## Nowe funkcje
