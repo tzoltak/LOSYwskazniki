@@ -25,7 +25,7 @@ dodaj_wartosc_ogolem <- function(x, wartosc, zawszeDodawaj = TRUE) {
     l <- as.character(sort(unique(x)))
   }
   if (length(l) > 1L | zawszeDodawaj) {
-    l <- unique(c(l, "Ogółem"))
+    l <- unique(c(l, wartosc))
   }
   return(factor(x, levels = l))
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/zanonimizuj_wskazniki_pd.R
 \name{zanonimizuj_wskazniki_pd}
 \alias{zanonimizuj_wskazniki_pd}
-\alias{anonimizuj_pojedynczy_wskaznik_pd}
+\alias{zanonimizuj_pojedynczy_wskaznik_pd}
 \title{Anonimizowanie wskaznikow w nierozlacznych podgrupach do publicznej prezentacji}
 \usage{
 zanonimizuj_wskazniki_pd(
@@ -12,7 +12,7 @@ zanonimizuj_wskazniki_pd(
   wskUsuwajZestawWartosci = c("dziedzina_kont", "dyscyplina_kont")
 )
 
-anonimizuj_pojedynczy_wskaznik_pd(x, usuwajZestawWartosci, progAbs, progSzk)
+zanonimizuj_pojedynczy_wskaznik_pd(x, usuwajZestawWartosci, progAbs, progSzk)
 }
 \arguments{
 \item{x}{ramka danych zawierająca (między innymi) kolumny ze zagregowanymi
@@ -48,7 +48,7 @@ Funkcja pozwala zanonimizować wskaźniki zagregowane (zamienić ich wartości n
 braki danych) przeznaczone do publicznej prezentacji, które zostały obliczone
 na podstawie danych opisujących mniej niż zadaną liczbę absolwentów lub
 na podstawie absolwentów mniej niż zadanej liczby różnych szkół.
-\code{anonimizuj_pojedynczy_wskaznik_pd()} to nieeksportowana funkcja wywoływana
+\code{zanonimizuj_pojedynczy_wskaznik_pd()} to nieeksportowana funkcja wywoływana
 wewnętrznie i będąca \emph{koniem roboczym} procesu takiej anonimizacji.
 
 Warto zwrócić uwagę, że taka anonimizacja ignoruje ewentualną możliwość
@@ -74,4 +74,12 @@ odpowiednio \code{probAbs} i \code{progSzk}.
 
 \strong{Wskaźniki obliczone na podstawie pustych grup absolwentów nie są
 anonimizowane!}
+
+Powtórne wywołanie funkcji na tym samym obiekcie z podaniem bardziej
+restrykcyjnych (wyższych) progów spowoduje odpowiednie zanonimizowanie
+(lub pozostawienie bez zmian) wskaźników wcześniej niezanonimizowanych
+oraz nadpisze wartości progów zapisane w atrybutach wskaźników już wcześniej
+zanonimizowanych. Powtórne wywołanie z podaniem mniej restrykcyjnych wartości
+progów nic nie zmieni, ale jeśli w danych były już zanonimizowane wskaźniki,
+wygeneruje ostrzeżenia.
 }

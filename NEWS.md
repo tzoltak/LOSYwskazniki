@@ -1,3 +1,27 @@
+# LOSYwskazniki 0.10.0 (30.10.2026)
+
+## Nowe funkcje
+
+-  `zawez_tabele_posrednie_do_rocznikow()` pozwala w wygodny sposób zawęzić zakres danych w tabelach *pośrednich* tylko do wskazanych roczników absolwentów **jak też ze względu na inne kryteria** (odwołujące się do wartości kolumn w tabeli *pośredniej* p4);
+   -  Funkcja domyślnie stara się znaleźć i zmodyfikować obiekty zawierające tabele *pośrednie* w środowisku, w którym została wywołana (choć może też być wywołana z przekazaniem jej listy tabel *pośrednich*).
+
+## Udoskonalenia
+
+-  `zanonimizuj_pojedynczy_wskaznik_pd()` uruchomiona powtórnie na tym samym zestawieniu wskaźników sensowniej traktuje wskaźniki, których wartości zostały już wcześniej zanonimizowane:
+   -  jeśli progi podane w późniejszym wywołaniu są bardziej restrykcyjne (niż użyte wcześniej), odpowiednio zmienia informacje o progach w już wcześnie zanonimizowanych wskaźnikach (czego wcześniej nie robiła);
+   -  jeśli progi podane w późniejszym wywołaniu są mniej restrykcyjne (niż użyte wcześniej), generuje opisujące to ostrzeżenia;
+   -  (jednocześnie, tak jak to robiła do tej pory, anonimizuje wskaźniki, które nie zostały wcześniej zanonimizowane, adekwatnie do zadanych progów);
+-  `oblicz_wskazniki_pd()` (a w konsekwencji również (`oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_jst()`) konsekwentnie traktuje sytuacje, gdy w danej grupie nie ma żadnych danych lub są wyłącznie braki danych:
+   -  wartość wskaźnika zawsze stanowi wtedy wektor lub tabela zerowej długości (wcześniej dla zmiennych liczbowych i logicznych był to wektor wartości zwróconych przez odpowiednie funkcje obliczające statystyki - typowo `NaN` - dla czynników tabela wypełniona samymi zerowymi liczebnościami, dla kolumn macierzowych - o ile nie były wymienione we `wskTylkoNiezerowe` - wektor nazwanych elementów będących zerami, a dla wektorów ciągów znaków jednowymiarowa tabela zerowej długości;
+-  `dodaj_procenty_wskazniki_pd()` nie dodaje procentowania do wskaźników, które wyglądają na to, że już zawierają procentowanie;
+-  `dodaj_procenty_wskazniki_pd()` wywołana z argumentem `dopiszZadenZWymienionych=TRUE` nie dodaje wartości "Żaden z wymienionych", jeśli widzi, że już występuje ona wśród wartości wskaźnika.
+
+## Naprawione błędy
+
+-  `dodaj_wartosc_ogolem()` używa argumentu `wartosc`.
+   -  W efekcie użycie argumentu `etykietaOgolem` w wywołaniach `oblicz_wskazniki_pd_jst()` i `oblicz_wskazniki_pd_grupy()` odnosi zamierzony skutek;
+-  `splaszcz_wskazniki_pd()` nie generuje ostrzeżenia o ignorowaniu wartości argumentu `dopiszAtrybuty` innych niż "nie" przy wywołaniu jej z argumentem `dopiszAtrybuty="nie"`.
+
 # LOSYwskazniki 0.9.1 (14.10.2026)
 
 ## Udoskonalenia

@@ -30,7 +30,7 @@ splaszcz_wskazniki_pd <- function(x, dopiszAtrybuty = c("nie", "lAbs", "lSzk",
                                                         "lNieDotyczy")) {
   dopiszAtrybuty <- match.arg(dopiszAtrybuty, several.ok = TRUE)
   if (any(dopiszAtrybuty == "nie")) {
-    if (length(dopiszAtrybuty) > 0L) {
+    if (length(dopiszAtrybuty) > 1L) {
       warning("Elementy przekazane argumentem `dopiszAtrybuty` inne niż 'nie' zostały zignorowane.")
     }
     dopiszAtrybuty <- vector(mode = "character", length = 0L)

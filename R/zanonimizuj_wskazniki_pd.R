@@ -4,7 +4,7 @@
 #' braki danych) przeznaczone do publicznej prezentacji, które zostały obliczone
 #' na podstawie danych opisujących mniej niż zadaną liczbę absolwentów lub
 #' na podstawie absolwentów mniej niż zadanej liczby różnych szkół.
-#' `anonimizuj_pojedynczy_wskaznik_pd()` to nieeksportowana funkcja wywoływana
+#' `zanonimizuj_pojedynczy_wskaznik_pd()` to nieeksportowana funkcja wywoływana
 #' wewnętrznie i będąca *koniem roboczym* procesu takiej anonimizacji.
 #'
 #' Warto zwrócić uwagę, że taka anonimizacja ignoruje ewentualną możliwość
@@ -46,6 +46,14 @@
 #'
 #' **Wskaźniki obliczone na podstawie pustych grup absolwentów nie są
 #' anonimizowane!**
+#'
+#' Powtórne wywołanie funkcji na tym samym obiekcie z podaniem bardziej
+#' restrykcyjnych (wyższych) progów spowoduje odpowiednie zanonimizowanie
+#' (lub pozostawienie bez zmian) wskaźników wcześniej niezanonimizowanych
+#' oraz nadpisze wartości progów zapisane w atrybutach wskaźników już wcześniej
+#' zanonimizowanych. Powtórne wywołanie z podaniem mniej restrykcyjnych wartości
+#' progów nic nie zmieni, ale jeśli w danych były już zanonimizowane wskaźniki,
+#' wygeneruje ostrzeżenia.
 #' @importFrom dplyr %>% across mutate where
 #' @export
 zanonimizuj_wskazniki_pd <- function(x, progAbs = 10, progSzk = 3,
@@ -69,7 +77,7 @@ zanonimizuj_wskazniki_pd <- function(x, progAbs = 10, progSzk = 3,
     x <-
       mutate(x,
              across(where(is.list),
-                    ~mapply(anonimizuj_pojedynczy_wskaznik_pd,
+                    ~mapply(zanonimizuj_pojedynczy_wskaznik_pd,
                             ., wskaznik %in% wskUsuwajZestawWartosci,
                             MoreArgs = list(progAbs = progAbs,
                                             progSzk = progSzk),
@@ -83,11 +91,11 @@ zanonimizuj_wskazniki_pd <- function(x, progAbs = 10, progSzk = 3,
     x <-
       mutate(x,
              across(where(is.list) & any_of(wskUsuwajZestawWartosci),
-                    ~lapply(., anonimizuj_pojedynczy_wskaznik_pd,
+                    ~lapply(., zanonimizuj_pojedynczy_wskaznik_pd,
                             usuwajZestawWartosci = TRUE,
                             progAbs = progAbs, progSzk = progSzk)),
              across(where(is.list) & !any_of(wskUsuwajZestawWartosci),
-                    ~lapply(., anonimizuj_pojedynczy_wskaznik_pd,
+                    ~lapply(., zanonimizuj_pojedynczy_wskaznik_pd,
                             usuwajZestawWartosci = FALSE,
                             progAbs = progAbs, progSzk = progSzk)))
 
@@ -99,12 +107,29 @@ zanonimizuj_wskazniki_pd <- function(x, progAbs = 10, progSzk = 3,
 #' wartości wskaźnika powinna objąć również zestaw wartości (jeśli `TRUE`,
 #' zanonimizowany wskaźnik będzie pojedynczym brakiem danych, bez nazwy
 #' elementu, choć z atrybutami)
-anonimizuj_pojedynczy_wskaznik_pd <- function(x, usuwajZestawWartosci,
-                                              progAbs, progSzk) {
+zanonimizuj_pojedynczy_wskaznik_pd <- function(x, usuwajZestawWartosci,
+                                               progAbs, progSzk) {
   a <- attributes(x)
   if (any(c("lAbs", "lSzk") %in% names(a))) {
     if (!("lAbs" %in% names(a))) a$lAbs <- 0L
     if (!("lSzk" %in% names(a))) a$lSzk <- 0L
+    # Obsługa już wcześniej zanonimizowanych wskaźników
+    if (a$lAbs < 0L) {
+      if (-1L*a$lAbs > progAbs) {
+        warning("Podana wartość `progAbs` jest mniejsza (mniej restrykcyjna) niż zastosowana już wcześniej do zanonimizowania tego wskaźnika.",
+                immediate. = FALSE, call. = FALSE)
+      } else {
+        a$lAbs <- -1L*a$lAbs
+      }
+    }
+    if (a$lSzk < 0L) {
+      if (-1L*a$lSzka$lSzk > progSzk) {
+        warning("Podana wartość `progSzk` jest mniejsza (mniej restrykcyjna) niż zastosowana już wcześniej do zanonimizowania tego wskaźnika.",
+                immediate. = FALSE, call. = FALSE)
+      } else {
+        a$lSzk <- -1L*a$lSzk
+      }
+    }
 
     if ((a$lAbs < progAbs & a$lAbs > 0) | is.na(a$lAbs) |
         (a$lSzk < progSzk & a$lSzk > 0) | is.na(a$lSzk)) {

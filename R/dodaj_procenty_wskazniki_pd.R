@@ -45,13 +45,21 @@ dodaj_procenty_wskazniki_pd <- function(x, dopiszZadenZWymienionych = FALSE) {
                     ~lapply(.,
                             \(w, dopiszZadenZWymienionych) {
                               if (!hasName(attributes(w), "lAbs") |
-                                  (!is.table(w) &
+                                  (!is.array(w) &
                                    !hasName(attributes(w),
                                             "lZadenZWymienionych"))) {
                                 return(w)
                               }
+                              if (is.array(w)) {
+                                if ("rozklad" %in% names(dimnames(w))) {
+                                  warning("Wskaznik jest już tablicą (array), której wymiar ma nazwę 'rozklad'. Nie zostanie on przekształcony.")
+                                  return(w)
+                                }
+                              }
                               if (dopiszZadenZWymienionych &
-                                  hasName(attributes(w), "lZadenZWymienionych")) {
+                                  hasName(attributes(w), "lZadenZWymienionych") &
+                                  !("Żaden z wymienionych" %in% c(names(w),
+                                                                  dimnames(w)[[1]]))) {
                                 # dla zachowania atrybutów w ten sposób
                                 w[length(w) + 1L] <-
                                   attributes(w)$lZadenZWymienionych
@@ -60,9 +68,6 @@ dodaj_procenty_wskazniki_pd <- function(x, dopiszZadenZWymienionych = FALSE) {
                               pct <- w / attributes(w)$lAbs
                               a <- attributes(w)
                               if (is.array(w)) {
-                                if ("rozklad" %in% names(dimnames(w))) {
-                                  warning("Wskaznik jest już tablicą (array), której wymiar ma nazwę 'rokzlad'. Prawdopodobnie nie powinien on być (kolejny raz) procentowany.")
-                                }
                                 w <- array(c(w, pct), dim = c(dim(w), 2),
                                            dimnames = c(dimnames(w),
                                                         rozklad = list(c("N",

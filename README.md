@@ -48,6 +48,7 @@ Ponadto zawiera też funkcję pozwalającą zagregować dane - typowo zawarte w 
 
 Oddzielny zestaw funkcji pozwala przygotować zestawiania wskaźników zagregowanych, które mają być dostępne publicznie, w związku z czym muszą zostać obliczone we wszystkich pożądanych przekrojach analitycznych definiowanych przez kombinację wartości wskazanych zmiennych (tak, aby nie zachodziła potrzeba żadnej ich dalszej agregacji):
 
+-   `zawez_tabele_posrednie_do_rocznikow` - pozwala w wygodny sposób zawęzić zakres danych w tabelach *pośrednich* tylko do wskazanych roczników absolwentów;
 -   `oblicz_wskazniki_pd_jst()` - najogólniejsza funkcja, pozwalająca przygotować zestawienie wartości zagregowanych wskaźników z danej edycji monitoringu dla wszystkich JST na określonym poziomie (Polska jako całość, województwa, powiaty);
 -   `oblicz_wskazniki_pd_grupy()` - wykorzystywana przez `oblicz_wskazniki_pd_jst()` (w ramach konkretnej JST) do przygotowania wszystkich kombinacji wartości zmiennych niezależnych (filtrujących), a także dodanie wartości *ogółem*, i obliczenie wartości zagregowanych wskaźników dla każdej z nich;
 -   `oblicz_wskazniki_pd()` - wykorzystywana przez `oblicz_wskazniki_pd_grupy()` do obliczenia wartości zagregowanych wskaźników na podstawie kolumn w przekazanych podzbiorach tabel *pośrednich* P4 i P3, adekwatnie do typu agregowanego wskaźnika;
@@ -70,9 +71,10 @@ library(LOSYwskazniki)
 # 1. Wczytanie pliku z tabelami pośrednimi
 load("tabele-posrednie-2021.RData") 
 # 2. Odfiltrowanie interesujących nas absolwentów
-p4 <- p4 |>
-  filter(rok_abs == 2019,
-         !szk_specjalna)
+zawez_tabele_posrednie_do_rocznikow(
+  lataAbs = 2019, # lata ukończenia szkoły należy wskazać argumentem `lataAbs`
+  !szk_specjalna) # ew. inne kryteria zawężenia danych (na podstawie wartości
+                  # kolumn z tabeli pośredniej p4) przekazuje się jako wyrażenia
 # 3. Odfiltrowanie p3 do wybranych miesiecy
 p3 <- p3 |>
   filter(mies_od_ukoncz %in% c(6, 18))
@@ -96,7 +98,7 @@ wynikiSplaszczoneKazdyWskaznikOddzielnie <- wyniki |>
   zanonimizuj_wskazniki_pd() |>
   usun_puste_wskazniki_pd() |>
   dodaj_procenty_wskazniki_pd(dopiszZadenZWymienionych = TRUE)
-wynikiSplaszczoneKazdyWskaznikOddzielnie <- wynikiSplaszczoneKazdyWskaznikOddzielnie
+wynikiSplaszczoneKazdyWskaznikOddzielnie <- wynikiSplaszczoneKazdyWskaznikOddzielnie |>
   split(wynikiSplaszczoneKazdyWskaznikOddzielnie$wskaznik) |>
   lapply(splaszcz_wskazniki_pd, dopiszAtrybuty = "lAbs")
 ```

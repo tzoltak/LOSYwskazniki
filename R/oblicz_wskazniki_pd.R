@@ -214,34 +214,51 @@ oblicz_wskazniki_pd <- function(p4, p3,
       rename_with(~paste0(., "0"), .cols = any_of(wskBezPrzyrostkow))
   }
   p4 <- p4 %>%
-    summarise(across(c(where(is.matrix) & (where(is.numeric) | where(is.logical)) &
-                         where(~length(.x) > 0),
-                       -any_of(c("id_abs", "rok_abs", "id_szk"))),
-                     ~list(structure(colSums(.[, colSums(!is.na(.)) != 0,
-                                               drop = FALSE],
-                                             na.rm = TRUE),
-                                     lAbs = nrow(.) - sum(rowSums(!is.na(.)) == 0),
-                                     lSzk = n_distinct(.data$id_szk[rowSums(!is.na(.)) > 0]),
-                                     lZadenZWymienionych =
-                                       sum(rowSums(., na.rm = TRUE) == 0 &
-                                             rowSums(!is.na(.)) > 0),
-                                     lNieDotyczy = sum(rowSums(!is.na(.)) == 0)))),
-              # gdy brak danych, wskaźniki macierzowe wymagają innego potraktowania
-              across(c(where(is.matrix) & where(~length(.x) == 0),
-                       -any_of(c("id_abs", "rok_abs", "id_szk"))),
-                     ~list(structure(colSums(.),
-                                     lAbs = 0,
-                                     lSzk = 0,
-                                     lZadenZWymienionych = 0,
-                                     lNieDotyczy = 0))),
-              across(c(where(is.factor) | where(is.character),
-                       -any_of(c("id_abs", "rok_abs", "id_szk"))),
-                     ~list(structure(table(.),
-                                     lAbs = length(.) - sum(is.na(.)),
-                                     lSzk = n_distinct(.data$id_szk[!is.na(.)]),
-                                     lNieDotyczy = sum(is.na(.))))),
-              across(c(where(is.numeric) | where(is.logical),
-                       -any_of(c("id_abs", "rok_abs", "id_szk"))),
+    summarise(
+      # same braki danych lub brak jakichkolwiek danych, traktujemy specyficznie
+      across(c(where(~is.matrix(.x) &
+                       (is.numeric(.x) | is.logical(.x)) &
+                       (all(is.na(.x)) | length(.x) == 0L)),
+               -any_of(c("id_abs", "rok_abs", "id_szk"))),
+             ~list(structure(vector(mode = "numeric", length = 0L),
+                             lAbs = 0L,
+                             lSzk = 0L,
+                             lZadenZWymienionych = 0L,
+                             lNieDotyczy = length(.)))),
+      across(c(where(~is.factor(.x) &
+                       (all(is.na(.x)) | length(.x) == 0L)),
+               -any_of(c("id_abs", "rok_abs", "id_szk"))),
+             ~list(structure(table(NA),
+                             lAbs = 0L,
+                             lSzk = 0L,
+                             lNieDotyczy = length(.)))),
+      across(c(where(~(is.numeric(.x) | is.logical(.x)) &
+                       (all(is.na(.x)) | length(.x) == 0L)),
+               -any_of(c("id_abs", "rok_abs", "id_szk"))),
+             ~list(structure(vector(mode = "numeric", length = 0L),
+                             lAbs = 0L,
+                             lSzk = 0L,
+                             lNieDotyczy = length(.)))),
+      # poniżej już normalne sytuacje
+      across(c(where(is.matrix) & (where(is.numeric) | where(is.logical)),
+               -any_of(c("id_abs", "rok_abs", "id_szk"))),
+             ~list(structure(colSums(.[, colSums(!is.na(.)) != 0,
+                                       drop = FALSE],
+                                     na.rm = TRUE),
+                             lAbs = nrow(.) - sum(rowSums(!is.na(.)) == 0),
+                             lSzk = n_distinct(.data$id_szk[rowSums(!is.na(.)) > 0]),
+                             lZadenZWymienionych =
+                               sum(rowSums(., na.rm = TRUE) == 0 &
+                                     rowSums(!is.na(.)) > 0),
+                             lNieDotyczy = sum(rowSums(!is.na(.)) == 0)))),
+      across(c(where(is.factor) | where(is.character),
+               -any_of(c("id_abs", "rok_abs", "id_szk"))),
+             ~list(structure(table(.),
+                             lAbs = length(.) - sum(is.na(.)),
+                             lSzk = n_distinct(.data$id_szk[!is.na(.)]),
+                             lNieDotyczy = sum(is.na(.))))),
+      across(c(where(is.numeric) | where(is.logical),
+               -any_of(c("id_abs", "rok_abs", "id_szk"))),
                      ~list(structure(unlist(lapply(
                        statystyki,
                        function(x, dane) {
