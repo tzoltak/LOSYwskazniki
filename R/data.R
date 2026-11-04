@@ -21,7 +21,7 @@
 #' Dla każdej kombinacji wartości parametrów obliczenia uruchamiano tylko raz,
 #' nie dbając przesadnie o standaryzację warunków - niekiedy (gdy
 #' wykorzystywanych było łącznie mniej rdzeni) w tle działała również
-#' przeglądarka internetowa i aplikacja poczty elektornicznej, więc **wyniki nie
+#' przeglądarka internetowa i aplikacja poczty elektronicznej, więc **wyniki nie
 #' są zbyt dokładne**.
 #' @format Ramka danych z 51 wierszami i 9 kolumnami:
 #' \itemize{

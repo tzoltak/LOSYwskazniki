@@ -20,7 +20,7 @@
 #' zapisane), dla tych wskaźników, które zostały *ocenzurowane*/zanonimizowane
 #' (tj. ich atrybut `lAbs` jest mniejszy od zera lub ich atrybut `lSzk` jest
 #' mniejszy od zera);
-#' podany ciag znaków może zawierać kody specjalne "\{lAbs\}" i "\{lSzk\}", za
+#' podany ciąg znaków może zawierać kody specjalne "\{lAbs\}" i "\{lSzk\}", za
 #' które podstawione zostaną odpowiednie wartości progów użytych podczas
 #' anonimizacji (odczytane z atrybutów `lAbs` i `lSzk`);
 #' jeśli taki atrybut nie ma być dopisywany, należy argumentem przekazać wartość

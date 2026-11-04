@@ -22,9 +22,9 @@
 #' kwalifikujący się do przekształcenia. Zostanie on przekształcony w tablicę
 #' (*array*) z dodanym dodatkowym wymiarem o nazwie "rozklad", którego dwa
 #' elementy będą miały nazwy "N" i "Pct", gdzie element "N" będzie przechowywał
-#' dotychczasową postać wskażnika, a element "Pct" dotychczasowe wartości
+#' dotychczasową postać wskaźnika, a element "Pct" dotychczasowe wartości
 #' podzielone przez wartość atrybutu `lAbs`. Atrybuty `lAbs`, `lSzk`,
-#' `lZadenZWymienionych` i `lNieDotyczy` zostaną w przekształconym wskażniku
+#' `lZadenZWymienionych` i `lNieDotyczy` zostaną w przekształconym wskaźniku
 #' bez zmian.
 #'
 #' Jeśli argument `dopiszZadenZWymienionych=TRUE`, przed dokonaniem opisanego

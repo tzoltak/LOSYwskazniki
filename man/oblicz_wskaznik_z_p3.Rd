@@ -40,7 +40,7 @@ agregacji wynagrodzeń i \code{FALSE} w pozostałych przypadkach}
 }
 \value{
 Ramka danych o kolumnach takich jak ramce przekazanej argumentem
-\code{p3}, ale z wyjątkiem kolumn opisujących okres (miesiac; tj. bez kolumn
+\code{p3}, ale z wyjątkiem kolumn opisujących okres (miesiąc; tj. bez kolumn
 \code{okres}, \code{rok}, \code{miesiac}, \code{mies_od_ukoncz}) lub - jeśli podano argument
 \code{wszystkieObs} - kolumnach występujących zarówno w \code{p3} jak
 i we \code{wszystkieObs} oraz kolumnie o nazwie podanej argumentem \code{zm}. Liczba

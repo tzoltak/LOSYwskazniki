@@ -39,13 +39,13 @@
 
 -  `dodaj_procenty_wskazniki_pd()` - pozwala dodać do już policzonych wskaźników będących rozkładami liczebności również rozkład częstości;
 -  `splaszcz_wskazniki_pd()` - pozwala *spłaszczyć* strukturę zestawienia wartości zagregowanych wskaźników tak, aby nie zawierała już ona kolumn-list-wektorów; uwaga, zwracana ramka danych może mieć bardzo dużo kolumn;
--  `usun_puste_wskazniki_pd()` - pozwala usunąć z zestawienia wartości zagregowanych wskaźników (w formacie *długim*) wiersze opisujące takie kombinacje cech absolwentów, które nie wysępowały w danych (lub zostały zanonimizowane).
+-  `usun_puste_wskazniki_pd()` - pozwala usunąć z zestawienia wartości zagregowanych wskaźników (w formacie *długim*) wiersze opisujące takie kombinacje cech absolwentów, które nie występowały w danych (lub zostały zanonimizowane).
 
 ## Udoskonalenia
 
 -  `dodaj_wskazniki_dyplomy()`, `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_prace()` mają mniejszy ślad pamięciowy;
 -  Uzupełniono asercje `dodaj_wskazniki_kontynuacje()` i `dodaj_wskazniki_prace()` w zakresie kompletności zestawu zmiennych w ramce danych przekazywanej argumentem odpowiednio `p2` albo `p3`;
--  `zanonimizuj_wskazniki_pd()` obsługuuje również wskaźniki z dodanym (przy pomocy `dodaj_proenty_wskazniki_pd()` rozkładami liczebności.
+-  `zanonimizuj_wskazniki_pd()` obsługuje również wskaźniki z dodanym (przy pomocy `dodaj_proenty_wskazniki_pd()` rozkładami liczebności.
 
 ## Naprawione błędy
 
@@ -92,7 +92,7 @@
 
 ## Nowe funkcje
 
--   `dopisz_wskaznik_pd_liczba_abs()` pozwala dodać do zestawienia zagregowanych wskaźników w formie odpowiedniej do wykorzystania w zastosowaniach, w których takie zestawienia wskaźników mają być publicznie dostępne (np. w interaktywnych raportach przygotowanych w formie statycznych stron www) wskaznik opisujący liczbę absolwentów (obliczany na podstawie atrybutów wskazanego, już wcześniej obliczonego wskaźnika).
+-   `dopisz_wskaznik_pd_liczba_abs()` pozwala dodać do zestawienia zagregowanych wskaźników w formie odpowiedniej do wykorzystania w zastosowaniach, w których takie zestawienia wskaźników mają być publicznie dostępne (np. w interaktywnych raportach przygotowanych w formie statycznych stron www) wskaźnik opisujący liczbę absolwentów (obliczany na podstawie atrybutów wskazanego, już wcześniej obliczonego wskaźnika).
 
 ## Zmiany nazw argumentów funkcji
 
@@ -110,13 +110,13 @@
     -   Zrównoleglanie na tym poziomie oczywiście może zostać zastosowane tylko przy obliczaniu wskaźników dla województw lub powiatów.
     -   Testy empiryczne na danych do prototypu raportu ogólnopolskiego wskazują, że .
 -   W związku z implementacją wielowątkowości pakiet zależy teraz od pakietu *parallel*.
--   Przeprowadzono (niezbyt rozbudowane) testy empiryczne mające na celu ustalenie optymalnych wartości argumentów opisujących zrównoleglannie - ich wyniki zostały dołączone do pakietu w postaci zbioru danych `czasy_wskazniki_pd` i omówione w dokumentacji funkcji `oblicz_wskazniki_pd_JST()`.
+-   Przeprowadzono (niezbyt rozbudowane) testy empiryczne mające na celu ustalenie optymalnych wartości argumentów opisujących zrównoleglanie - ich wyniki zostały dołączone do pakietu w postaci zbioru danych `czasy_wskazniki_pd` i omówione w dokumentacji funkcji `oblicz_wskazniki_pd_JST()`.
 
 ## Naprawione błędy
 
 -   `oblicz_wskazniki_pd_grupy()`:
     -   rozpatrując, które kombinacje wartości nie występują w danych (na podstawie argumentu `zmTylkoWartosciWDanych`) definiując pogrupowanie bierze pod uwagę również zmienną opisaną nazwą elementu listy,
-    -   sprawdzając, czy dana zmienna grupująca opisuje kategorię *ogółem* przyrównuje jej wartość do weartości podanej argumentem `etykietaOgolem`, zamiast do ciagu znaków "Ogółem",
+    -   sprawdzając, czy dana zmienna grupująca opisuje kategorię *ogółem* przyrównuje jej wartość do wartości podanej argumentem `etykietaOgolem`, zamiast do ciągu znaków "Ogółem",
     -   radzi sobie w sytuacji, gdy wśród zmiennych grupujących nie ma żadnych, które występowałyby również w `zmTylkoWartosciWDanych`.
 
 # LOSYwskazniki 0.5.0 (28.01.2026)
@@ -153,7 +153,7 @@
 
 ## Nowe funkcje
 
--   `przygotuj_dane_przeplywy()` pozwala zagregować dane - typowo zawarte w tabeli *pośredniej* P3 - do postaci, w której mogą one zostac łatwo wykorzystane do przygotowania wykresu przepływów, w szczególności z wykorzystaniem pakietu *ggalluvial* (i korzystającego z tego pakietu szablonu wykresu `wykresPrzeplywyStatusy`, zawartego w pakiecie *LOSYkolory*).
+-   `przygotuj_dane_przeplywy()` pozwala zagregować dane - typowo zawarte w tabeli *pośredniej* P3 - do postaci, w której mogą one zostać łatwo wykorzystane do przygotowania wykresu przepływów, w szczególności z wykorzystaniem pakietu *ggalluvial* (i korzystającego z tego pakietu szablonu wykresu `wykresPrzeplywyStatusy`, zawartego w pakiecie *LOSYkolory*).
 
 ## Udoskonalenia
 

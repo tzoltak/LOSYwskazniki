@@ -31,7 +31,7 @@
 #' @details
 #' Funkcja została napisana tak, aby miała możliwie niewielki ślad pamięciowy,
 #' gdyż zestawienia przygotowane przy pomocy [oblicz_wskazniki_pd_jst()] mogą
-#' być ekstremalnie duże (jeśli tylko uzyje się nieco szerszego zestawu
+#' być ekstremalnie duże (jeśli tylko użyje się nieco szerszego zestawu
 #' zmiennych grupujących).
 #'
 #' Wewnątrz wykorzystywana jest funkcje [przygotuj_wskazniki_pd_toJSON()],

@@ -32,7 +32,7 @@ zostać zapisany, jako element "cenzura" (elementy "w" i "a" nie zostaną wtedy
 zapisane), dla tych wskaźników, które zostały \emph{ocenzurowane}/zanonimizowane
 (tj. ich atrybut \code{lAbs} jest mniejszy od zera lub ich atrybut \code{lSzk} jest
 mniejszy od zera);
-podany ciag znaków może zawierać kody specjalne "\{lAbs\}" i "\{lSzk\}", za
+podany ciąg znaków może zawierać kody specjalne "\{lAbs\}" i "\{lSzk\}", za
 które podstawione zostaną odpowiednie wartości progów użytych podczas
 anonimizacji (odczytane z atrybutów \code{lAbs} i \code{lSzk});
 jeśli taki atrybut nie ma być dopisywany, należy argumentem przekazać wartość

@@ -23,16 +23,16 @@
 #' @param tabelePosrednie opcjonalnie lista ramek danych zawierających tabele
 #' *pośrednie*
 #' @details
-#' Funkcja w specyficzny sposób podchodzi do filtrowania po roku ukończnia
+#' Funkcja w specyficzny sposób podchodzi do filtrowania po roku ukończenia
 #' szkoły (tj. wartościach kolumny `rok_abs`) - wymagając zawsze zdefiniowania
 #' go *explicite* i wykonując diagnostykę przyrównującą podane wartości
 #' argumentu `lataAbs` do tych, które występują w tabeli *pośredniej* p4.
 #'
 #' Ew. dodatkowe wyrażenia filtrujące (przekazane `...`) nie są w żaden sposób
 #' weryfikowane, w szczególności pod kątem tego, czy podawane w nich wartości
-#' występują w danych (za to proba odwołania się do kolumny nie występującej
+#' występują w danych (za to próba odwołania się do kolumny nie występującej
 #' w tabeli *pośredniej* p4 doprowadzi oczywiście do błędu).
-#' @returns Lista zaweżonych (odfiltrowanych) tabel pośrednich albo, przy
+#' @returns Lista zawężonych (odfiltrowanych) tabel pośrednich albo, przy
 #' wywołaniu z argumentem `tabelePosrednie=NULL`, niewidocznie
 #' (tj. z wykorzystaniem `invisible()`) wektor nazw obiektów, na których
 #' dokonano zawężenia.

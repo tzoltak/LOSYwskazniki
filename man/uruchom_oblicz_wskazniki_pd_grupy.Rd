@@ -33,7 +33,7 @@ podzbiorem), musi zawierać co najmniej kolumny \code{id_abs}, \code{rok_abs} i 
 \item{p3}{ramka danych z tabelą \emph{pośrednią} P3 (lub jej odfiltrowanym
 podzbiorem), musi zawierać co najmniej kolumny \code{id_abs}, \code{rok_abs}
 i \code{mies_od_ukoncz} lub \code{NULL} (jeśli \code{zmWskaznikiP3 } nie podaje żadnych
-wskzaźników)}
+wskaźników)}
 
 \item{zmGrupujace}{wektor tekstowy zawierający nazwy zmiennych z ramki danych
 przekazanej argumentem \code{p4}, kombinacje wartości których określają grupy,

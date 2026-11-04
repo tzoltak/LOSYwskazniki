@@ -34,7 +34,7 @@ z 64 GB RAM.
 Dla każdej kombinacji wartości parametrów obliczenia uruchamiano tylko raz,
 nie dbając przesadnie o standaryzację warunków - niekiedy (gdy
 wykorzystywanych było łącznie mniej rdzeni) w tle działała również
-przeglądarka internetowa i aplikacja poczty elektornicznej, więc \strong{wyniki nie
+przeglądarka internetowa i aplikacja poczty elektronicznej, więc \strong{wyniki nie
 są zbyt dokładne}.
 }
 \seealso{

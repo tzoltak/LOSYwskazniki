@@ -2,7 +2,7 @@
 #' @description
 #' Funkcja pozwala usunąć z zestawienia zagregowanych wskaźników (w formacie
 #' *długim*) wiersze opisujące takie kombinacje cech absolwentów, które nie
-#' wysępowały w danych.
+#' występowały w danych.
 #' @param x ramka danych zawierająca (między innymi) kolumny ze zagregowanymi
 #' wskaźnikami przeznaczonymi do publicznej prezentacji, typowo zwrócona przez
 #' funkcje [oblicz_wskazniki_pd_jst()], [oblicz_wskazniki_pd_grupy()] lub
@@ -13,7 +13,7 @@
 #' zanonimizowane (z wykorzystaniem [zanonimizuj_wskazniki_pd()]), gdyż liczyły
 #' zbyt mało absolwentów
 #' @returns Ramka danych przekazana argumentem `x`, z której usunięte zostały
-#' wiersze opisujące takie kombinacje cech absolwentów, które nie wysępowały
+#' wiersze opisujące takie kombinacje cech absolwentów, które nie występowały
 #' w danych.
 #' @export
 usun_puste_wskazniki_pd <- function(x, usunZanonimizowane = FALSE) {

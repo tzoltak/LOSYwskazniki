@@ -2,7 +2,7 @@
 #' @description
 #' Funkcja pozwala obliczyć zestawienia zagregowanych wskaźników z danej edycji
 #' monitoringu dla każdej JST na podanym poziomie podziału terytorialnego
-#' Polski (w przecięciu z kohortą absolwentów, opisną zmienną `rok_abs`).
+#' Polski (w przecięciu z kohortą absolwentów, opisaną zmienną `rok_abs`).
 #' @inheritParams oblicz_wskazniki_pd_grupy
 #' @param poziom opcjonalnie ciąg znaków - poziom podziału terytorialnego, na
 #' jakim mają zostać obliczone wskaźniki: "Polska", "wojewodztwa" lub "powiaty";

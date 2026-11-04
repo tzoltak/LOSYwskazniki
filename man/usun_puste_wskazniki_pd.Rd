@@ -20,11 +20,11 @@ zbyt mało absolwentów}
 }
 \value{
 Ramka danych przekazana argumentem \code{x}, z której usunięte zostały
-wiersze opisujące takie kombinacje cech absolwentów, które nie wysępowały
+wiersze opisujące takie kombinacje cech absolwentów, które nie występowały
 w danych.
 }
 \description{
 Funkcja pozwala usunąć z zestawienia zagregowanych wskaźników (w formacie
 \emph{długim}) wiersze opisujące takie kombinacje cech absolwentów, które nie
-wysępowały w danych.
+występowały w danych.
 }

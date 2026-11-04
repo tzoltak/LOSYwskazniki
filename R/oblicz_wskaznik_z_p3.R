@@ -27,7 +27,7 @@
 #' wyłączone wartości zmiennej o nazwie `zm` równe 0? domyślnie `TRUE` przy
 #' agregacji wynagrodzeń i `FALSE` w pozostałych przypadkach
 #' @returns Ramka danych o kolumnach takich jak ramce przekazanej argumentem
-#' `p3`, ale z wyjątkiem kolumn opisujących okres (miesiac; tj. bez kolumn
+#' `p3`, ale z wyjątkiem kolumn opisujących okres (miesiąc; tj. bez kolumn
 #' `okres`, `rok`, `miesiac`, `mies_od_ukoncz`) lub - jeśli podano argument
 #' `wszystkieObs` - kolumnach występujących zarówno w `p3` jak
 #' i we `wszystkieObs` oraz kolumnie o nazwie podanej argumentem `zm`. Liczba

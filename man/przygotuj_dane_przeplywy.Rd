@@ -35,7 +35,7 @@ Ramka danych o kolumnach:
 }
 \description{
 Funkcja pozwala zagregować dane - domyślnie pochodzące z tabeli \emph{pośredniej}
-P3 - do postaci, w której mogą one zostac łatwo wykorzystane do przygotowania
+P3 - do postaci, w której mogą one zostać łatwo wykorzystane do przygotowania
 wykresu przepływów, w szczególności z wykorzystaniem pakietu \emph{ggalluvial}
 (i korzystającego z tego pakietu szablonu wykresu \code{wykresPrzeplywyStatusy},
 zawartego w pakiecie \emph{LOSYkolory}).

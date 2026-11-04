@@ -29,7 +29,7 @@ tabele \emph{pośrednie} są przekazywane argumentem \code{tabelePosrednie})}
 \emph{pośrednie}}
 }
 \value{
-Lista zaweżonych (odfiltrowanych) tabel pośrednich albo, przy
+Lista zawężonych (odfiltrowanych) tabel pośrednich albo, przy
 wywołaniu z argumentem \code{tabelePosrednie=NULL}, niewidocznie
 (tj. z wykorzystaniem \code{invisible()}) wektor nazw obiektów, na których
 dokonano zawężenia.
@@ -47,13 +47,13 @@ istniejące. Alternatywnie, tabele \emph{pośrednie} można przekazać w formie 
 ramek danych, z wykorzystaniem argumentu \code{tabelePosrednie}.
 }
 \details{
-Funkcja w specyficzny sposób podchodzi do filtrowania po roku ukończnia
+Funkcja w specyficzny sposób podchodzi do filtrowania po roku ukończenia
 szkoły (tj. wartościach kolumny \code{rok_abs}) - wymagając zawsze zdefiniowania
 go \emph{explicite} i wykonując diagnostykę przyrównującą podane wartości
 argumentu \code{lataAbs} do tych, które występują w tabeli \emph{pośredniej} p4.
 
 Ew. dodatkowe wyrażenia filtrujące (przekazane \code{...}) nie są w żaden sposób
 weryfikowane, w szczególności pod kątem tego, czy podawane w nich wartości
-występują w danych (za to proba odwołania się do kolumny nie występującej
+występują w danych (za to próba odwołania się do kolumny nie występującej
 w tabeli \emph{pośredniej} p4 doprowadzi oczywiście do błędu).
 }

@@ -7,7 +7,7 @@
 #' @param p3 ramka danych z tabelą *pośrednią* P3 (lub jej odfiltrowanym
 #' podzbiorem), musi zawierać co najmniej kolumny `id_abs`, `rok_abs`
 #' i `mies_od_ukoncz` lub `NULL` (jeśli `zmWskaznikiP3 ` nie podaje żadnych
-#' wskzaźników)
+#' wskaźników)
 #' @param statystyki opcjonalnie lista z nazwanymi elementami, opisującymi
 #' statystyki, które mają zostać obliczone w odniesieniu do wskaźników
 #' **liczbowych** (w formacie takim, jak argument `.fns` w formie listy
