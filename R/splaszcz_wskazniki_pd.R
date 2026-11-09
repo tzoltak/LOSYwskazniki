@@ -70,17 +70,24 @@ splaszcz_wskazniki_pd <- function(x, dopiszAtrybuty = c("nie", "lAbs", "lSzk",
                       a <-  attributes(w)[intersect(dopiszAtrybuty,
                                                     names(attributes(w)))]
                       if (is.array(w)) {
+                        if (any(dim(w) == 0L)) {
+                          return(data.frame(x = NA)[, c(), drop = FALSE]) # ramka danych z zerową liczbą kolumn oraz 1 wierszem
+                        }
                         w <- as.data.frame(as.table(w))
                         n <- do.call(paste,
                                      args = w[, rev(seq_len(ncol(w) - 1L)),
                                               drop = FALSE])
-                        w <- w[, ncol(w)]
+                        w <- w[[ncol(w)]]
                         names(w) <- n
                       }
                       if (is(w, "vector")) { # is.vector nie działa, bo `w` co do zasady ma atrybuty
                         w <- c(w, unlist(a))
-                        return(as.data.frame(as.list(w),
-                                             check.names = FALSE))
+                        if (length(w) == 0L) {
+                          return(data.frame(x = NA)[, c(), drop = FALSE]) # ramka danych z zerową liczbą kolumn oraz 1 wierszem
+                        } else {
+                          return(as.data.frame(as.list(w),
+                                               check.names = FALSE))
+                        }
                       } else {
                         if (!is.null(w)) {
                           print(str(w))

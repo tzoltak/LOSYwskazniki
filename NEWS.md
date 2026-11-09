@@ -1,3 +1,12 @@
+# LOSYwskazniki 0.10.1 (10.11.2026)
+
+## Naprawione błędy
+
+-  Naprawiono niekompatybilność `splaszcz_wskazniki_pd()` ze sposobem tworzenia wskaźników dla pustych (lub zawierających tylko braki danych) grup przez `oblicz_wskazniki_pd()` (a w konsekwencji również (`oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_jst()`), wprowadzonym w wersji 0.10.0;
+-  `dodaj_wskazniki_kontynuacje()` wreszcie obsługuje poprawnie zmianę sposobu nazywania LOdD również po stronie kontynuacji nauki; uczyniono je też odpornym na pomysły, żeby `typ_szk_kont` w *p2* wyróżniała szkoły specjalne (choć w międzyczasie uznałem, że to był zły pomysł i się z tego wycofałem w *MLASdaneAdm*);
+   -  Adekwatnie dodano jeden wiersz do `legalneKontynuacje`;
+   -  W dokumentacji `dodaj_wskazniki_kontynuacje()` zapisano *explicite*, że tworzone wskaźniki kontynuacji nauki uwzględniają tylko wybrane, typowe formy.
+
 # LOSYwskazniki 0.10.0 (30.10.2026)
 
 ## Nowe funkcje

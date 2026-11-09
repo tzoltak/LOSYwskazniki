@@ -18,7 +18,7 @@
 #' monitoringu 2026)
 #' @returns Ramka danych przekazana argumentem `p4` z dodanymi kolumnami:
 #'
-#' -    `typ_szk_kont<mies_od_ukoncz>` - formy kontynuacji nauki,
+#' -    `typ_szk_kont<mies_od_ukoncz>` - formy kontynuacji nauki (tylko wybrane formy! p. sekcja *details*),
 #' -    `branza_kont_bsii<mies_od_ukoncz>` - branża kontynuacji nauki w BS II przez absolwentów BS I,
 #' -    `dziedzina_kont<mies_od_ukoncz>` - dziedzina kontynuacji nauki na studiach,
 #' -    `dyscyplina_kont<mies_od_ukoncz>` - dyscyplina kontynuacji nauki na studiach.
@@ -30,6 +30,10 @@
 #' argument `tylkoLegalne` został ustawiony na `FALSE`, to podjęcie nauki
 #' w danej formie itp. zostanie odnotowane wartością 1, nawet jeśli nominalnie
 #' taka sytuacja nie powinna się zdarzyć).
+#'
+#' **W odniesieniu do form kontynuacji nauki uwzględniane są tylko studia,
+#' szkoły policealne, licea ogólnokształcące dla dorosłych, branżowe szkoły
+#' II stopnia, KKZ i KUZ.**
 #' @seealso [oblicz_wskaznik_macierz()]- *koń roboczy* odpowiedzialny za
 #' obliczanie wskaźników w ramach `dodaj_wskazniki_kontynuacje()`
 #' @examples
@@ -94,17 +98,21 @@ dodaj_wskazniki_kontynuacje <- function(p4, p2, miesOdUkoncz,
   }
 
   p2$typ_szk_kont[p2$typ_szk_kont == "studia"] <- "Studia" # dla zgodności ze starszymi wersjami tabel pośrednich
+  p2$typ_szk_kont <- sub(" - specjaln[ae]$", "", p2$typ_szk_kont) # gdyby znów mi przyszło do głowy wyróżniać tu szkoły specjalne
   if (!wyroznijTrybStudiow) {
     p2$typ_szk_kont[p2$typ_szk_kont %in% c("Studia stacjonarne",
                                            "Studia niestacjonarne")] <- "Studia"
   }
+  nazwaLOdD <- intersect(p2$typ_szk_kont,
+                         c("Liceum dla dorosłych",
+                           "Liceum ogólnokształcące dla dorosłych"))
   if (any(p2$typ_szk_kont %in% c("Studia stacjonarne",
                                  "Studia niestacjonarne"))) {
     typySzkol <- c("Studia stacjonarne", "Studia niestacjonarne",
-                   "Szkoła policealna", "Liceum dla dorosłych",
+                   "Szkoła policealna", nazwaLOdD,
                    "Branżowa szkoła II stopnia", "KKZ", "KUZ")
   } else {
-    typySzkol <- c("Studia", "Szkoła policealna", "Liceum dla dorosłych",
+    typySzkol <- c("Studia", "Szkoła policealna", nazwaLOdD,
                    "Branżowa szkoła II stopnia", "KKZ", "KUZ")
   }
   p2 <- p2 %>%

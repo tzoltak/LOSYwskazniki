@@ -35,7 +35,7 @@ monitoringu 2026)}
 \value{
 Ramka danych przekazana argumentem \code{p4} z dodanymi kolumnami:
 \itemize{
-\item \verb{typ_szk_kont<mies_od_ukoncz>} - formy kontynuacji nauki,
+\item \verb{typ_szk_kont<mies_od_ukoncz>} - formy kontynuacji nauki (tylko wybrane formy! p. sekcja \emph{details}),
 \item \verb{branza_kont_bsii<mies_od_ukoncz>} - branża kontynuacji nauki w BS II przez absolwentów BS I,
 \item \verb{dziedzina_kont<mies_od_ukoncz>} - dziedzina kontynuacji nauki na studiach,
 \item \verb{dyscyplina_kont<mies_od_ukoncz>} - dyscyplina kontynuacji nauki na studiach.
@@ -53,6 +53,10 @@ absolwenta ze względu na typ ukończonej przez niego szkoły (choć jeśli
 argument \code{tylkoLegalne} został ustawiony na \code{FALSE}, to podjęcie nauki
 w danej formie itp. zostanie odnotowane wartością 1, nawet jeśli nominalnie
 taka sytuacja nie powinna się zdarzyć).
+
+\strong{W odniesieniu do form kontynuacji nauki uwzględniane są tylko studia,
+szkoły policealne, licea ogólnokształcące dla dorosłych, branżowe szkoły
+II stopnia, KKZ i KUZ.}
 }
 \examples{
 \dontrun{
