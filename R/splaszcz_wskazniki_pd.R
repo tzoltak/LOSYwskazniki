@@ -6,10 +6,11 @@
 #' wskaźnikami przeznaczonymi do publicznej prezentacji, typowo zwrócona przez
 #' funkcje [oblicz_wskazniki_pd_jst()], [oblicz_wskazniki_pd_grupy()] lub
 #' [oblicz_wskazniki_pd()]
-#' @param dopiszAtrybuty wektor ciągów znaków podający nazwy atrybutów
+#' @param dopiszAtrybuty opcjonalnie wektor ciągów znaków spośród: "lAbs",
+#' "lSzk", "lZadenZWymienionych", "lNieDotyczy", podający nazwy atrybutów
 #' wskaźników, które mają zostać dodane jako dodatkowe kolumny do tworzonej
-#' *płaskiej* reprezentacji lub "nie" aby wskazać, że takie kolumny nie mają
-#' być tworzone
+#' *płaskiej* reprezentacji lub "nie" (domyślnie) aby wskazać, że takie kolumny
+#' nie mają być tworzone
 #' @returns Ramka danych przekazana argumentem `x`, w której wszystkie wskaźniki
 #' zostały *rozwinięte* w kolumny.
 #' @details
@@ -25,10 +26,11 @@
 #' @importFrom dplyr %>% across all_of bind_rows mutate n_distinct
 #' @importFrom tidyr pivot_wider
 #' @export
-splaszcz_wskazniki_pd <- function(x, dopiszAtrybuty = c("nie", "lAbs", "lSzk",
-                                                        "lZadenZWymienionych",
-                                                        "lNieDotyczy")) {
-  dopiszAtrybuty <- match.arg(dopiszAtrybuty, several.ok = TRUE)
+splaszcz_wskazniki_pd <- function(x, dopiszAtrybuty = "nie") {
+  dopiszAtrybuty <- match.arg(dopiszAtrybuty,
+                              choices = c("nie", "lAbs", "lSzk",
+                                          "lZadenZWymienionych", "lNieDotyczy"),
+                              several.ok = TRUE)
   if (any(dopiszAtrybuty == "nie")) {
     if (length(dopiszAtrybuty) > 1L) {
       warning("Elementy przekazane argumentem `dopiszAtrybuty` inne niż 'nie' zostały zignorowane.")

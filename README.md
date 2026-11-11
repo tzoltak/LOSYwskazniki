@@ -14,7 +14,7 @@ Ponieważ jednak zawiera jedynie kod w R, nie ma potrzeby zaopatrywać się w ko
 
 Instalację najprościej przeprowadzić wykorzystując pakiet *devtools*:
 
-``` r
+```{r}
 install.packages('devtools') # potrzebne tylko, gdy nie jest jeszcze zainstalowany
 devtools::install_github('tzoltak/LOSYwskazniki')
 ```

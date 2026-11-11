@@ -1,11 +1,17 @@
-# LOSYwskazniki 0.10.1 (10.11.2026)
+# LOSYwskazniki 0.10.1 (11.11.2026)
+
+## Udoskonalenia
+
+-  Zmieniono domyślną wartość argumentu `dopiszAtrybuty` w `splaszcz_wskazniki_pd()`, aby wywołanie z domyślną wartością nie prowadziło do wygenerowania ostrzeżenia.
 
 ## Naprawione błędy
 
 -  Naprawiono niekompatybilność `splaszcz_wskazniki_pd()` ze sposobem tworzenia wskaźników dla pustych (lub zawierających tylko braki danych) grup przez `oblicz_wskazniki_pd()` (a w konsekwencji również (`oblicz_wskazniki_pd_grupy()` i `oblicz_wskazniki_pd_jst()`), wprowadzonym w wersji 0.10.0;
 -  `dodaj_wskazniki_kontynuacje()` wreszcie obsługuje poprawnie zmianę sposobu nazywania LOdD również po stronie kontynuacji nauki; uczyniono je też odpornym na pomysły, żeby `typ_szk_kont` w *p2* wyróżniała szkoły specjalne (choć w międzyczasie uznałem, że to był zły pomysł i się z tego wycofałem w *MLASdaneAdm*);
    -  Adekwatnie dodano jeden wiersz do `legalneKontynuacje`;
-   -  W dokumentacji `dodaj_wskazniki_kontynuacje()` zapisano *explicite*, że tworzone wskaźniki kontynuacji nauki uwzględniają tylko wybrane, typowe formy.
+   -  W dokumentacji `dodaj_wskazniki_kontynuacje()` zapisano *explicite*, że tworzone wskaźniki kontynuacji nauki uwzględniają tylko wybrane, typowe form;
+-  Poprawiono literówkę w `zanonimizuj_pojedynczy_wskaznik_pd()` skutkującą błędami przy powtórnych wywołaniach `zanonimizuj_wskazniki_pd()` na już wcześniej zanonimizowanych (ze względu na liczbę szkół) wskaźnikach;
+-  Do `zanonimizuj_wskazniki_pd()` dodano asercje sprawdzające, czy argumenty `lAbs` i `lSzk` mają skończone wartości (co pozwala uniknąć błędów wewnątrz `zanonimizuj_pojedynczy_wskaznik_pd()`).
 
 # LOSYwskazniki 0.10.0 (30.10.2026)
 

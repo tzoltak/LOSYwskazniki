@@ -4,10 +4,7 @@
 \alias{splaszcz_wskazniki_pd}
 \title{Przeksztalcanie wskaznikow w nierozlacznych podgrupach do publicznej prezentacji}
 \usage{
-splaszcz_wskazniki_pd(
-  x,
-  dopiszAtrybuty = c("nie", "lAbs", "lSzk", "lZadenZWymienionych", "lNieDotyczy")
-)
+splaszcz_wskazniki_pd(x, dopiszAtrybuty = "nie")
 }
 \arguments{
 \item{x}{ramka danych zawierająca (między innymi) kolumny ze zagregowanymi
@@ -15,10 +12,11 @@ wskaźnikami przeznaczonymi do publicznej prezentacji, typowo zwrócona przez
 funkcje \code{\link[=oblicz_wskazniki_pd_jst]{oblicz_wskazniki_pd_jst()}}, \code{\link[=oblicz_wskazniki_pd_grupy]{oblicz_wskazniki_pd_grupy()}} lub
 \code{\link[=oblicz_wskazniki_pd]{oblicz_wskazniki_pd()}}}
 
-\item{dopiszAtrybuty}{wektor ciągów znaków podający nazwy atrybutów
+\item{dopiszAtrybuty}{opcjonalnie wektor ciągów znaków spośród: "lAbs",
+"lSzk", "lZadenZWymienionych", "lNieDotyczy", podający nazwy atrybutów
 wskaźników, które mają zostać dodane jako dodatkowe kolumny do tworzonej
-\emph{płaskiej} reprezentacji lub "nie" aby wskazać, że takie kolumny nie mają
-być tworzone}
+\emph{płaskiej} reprezentacji lub "nie" (domyślnie) aby wskazać, że takie kolumny
+nie mają być tworzone}
 }
 \value{
 Ramka danych przekazana argumentem \code{x}, w której wszystkie wskaźniki

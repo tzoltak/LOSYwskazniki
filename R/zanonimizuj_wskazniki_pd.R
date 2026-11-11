@@ -61,12 +61,16 @@ zanonimizuj_wskazniki_pd <- function(x, progAbs = 10, progSzk = 3,
                                                                  "dyscyplina_kont")) {
   stopifnot(is.data.frame(x),
             is.numeric(progAbs), length(progAbs) == 1L, !is.na(progAbs),
+            is.finite(progAbs),
             is.numeric(progSzk), length(progSzk) == 1L, !is.na(progSzk),
+            is.finite(progSzk),
             is.character(wskUsuwajZestawWartosci) |
               is.null(wskUsuwajZestawWartosci))
   if (!is.null(wskUsuwajZestawWartosci)) {
     stopifnot(!anyNA(wskUsuwajZestawWartosci),
               !any(duplicated(wskUsuwajZestawWartosci)))
+  } else { # w zasadzie niekonieczne, ale bardziej explicite
+    wskUsuwajZestawWartosci <- vector(mode = "character", length = 0L)
   }
   if ("wskaznik" %in% names(x)) {
     nieWDanych <- setdiff(wskUsuwajZestawWartosci, unique(x$wskaznik))
@@ -123,7 +127,7 @@ zanonimizuj_pojedynczy_wskaznik_pd <- function(x, usuwajZestawWartosci,
       }
     }
     if (a$lSzk < 0L) {
-      if (-1L*a$lSzka$lSzk > progSzk) {
+      if (-1L*a$lSzk > progSzk) {
         warning("Podana wartość `progSzk` jest mniejsza (mniej restrykcyjna) niż zastosowana już wcześniej do zanonimizowania tego wskaźnika.",
                 immediate. = FALSE, call. = FALSE)
       } else {
