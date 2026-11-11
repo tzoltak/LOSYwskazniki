@@ -12,11 +12,11 @@ Pakiet nie jest wypchnięty na CRAN, więc trzeba instalować go ze źródeł.
 
 Ponieważ jednak zawiera jedynie kod w R, nie ma potrzeby zaopatrywać się w kompilatory, itp.
 
-Instalację najprościej przeprowadzić wykorzystując pakiet *devtools*:
+Instalację najprościej przeprowadzić wykorzystując pakiet *pak*:
 
 ```{r}
-install.packages('devtools') # potrzebne tylko, gdy nie jest jeszcze zainstalowany
-devtools::install_github('tzoltak/LOSYwskazniki')
+install.packages('pak') # potrzebne tylko, gdy nie jest jeszcze zainstalowany
+pak::pak('tzoltak/LOSYwskazniki')
 ```
 
 Dokładnie w ten sam sposób można przeprowadzić aktualizację pakietu do najnowszej wersji.
